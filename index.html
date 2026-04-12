@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>6x6 五個並べ (モンテカルロAI搭載版)</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 { color: #333; margin-bottom: 5px; }
+        .description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 500px;
+        }
+        #controls {
+            margin-bottom: 15px;
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        #status {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            height: 1.5em;
+        }
+        canvas {
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button {
+            padding: 8px 20px;
+            font-size: 1rem;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+        button:hover { background-color: #2ecc71; }
+        .radio-group { display: inline-block; margin-right: 15px; }
+    </style>
+</head>
+<body>
+
+    <h1>6x6 五個並べ <span style="color:#e74c3c; font-size:0.8em;">(MC AI版)</span></h1>
+    <div class="description">
+        【勝利条件】 ① 空きマスに置いて「ちょうど5個」並べる<br>
+        ② 相手が「ちょうど4個」並べた箇所をタップして指摘する
+    </div>
+
+    <div id="controls">
+        <div class="radio-group">
+            <label><input type="radio" name="firstPlayer" value="player" checked> あなたが先手 (○)</label>
+            <label><input type="radio" name="firstPlayer" value="ai"> PCが先手 (×)</label>
+        </div>
+        <button onclick="startGame()">ゲーム開始 / リセット</button>
+    </div>
+
+    <div id="status">ゲームを開始してください</div>
+    <canvas id="gameCanvas" width="480" height="480"></canvas>
+
+<script>
+/**
+ * 6x6 五個並べ - モンテカルロシミュレーションAI搭載版
+ * Developed by: 6M
+ */
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const statusDisplay = document.getElementById('status');
+
+const GRID_SIZE = 6;
+const CELL_SIZE = canvas.width / GRID_SIZE;
+const SIMULATION_COUNT = 150; // 1マスあたりの架空プレイ回数（強さと速度のバランス）
+
+let board = [];
+let currentPlayer = 'O'; 
+let playerColor = 'O';   
+let aiColor = 'X';       
+let gameOver = true;
+
+// 演出用の状態管理
+let lastMove = null;
+let winningCells = [];
+let blinkVisible = true;
+let blinkInterval = null;
+
+// 直線の座標配列を取得する純粋関数
+function getExactLine(tempBoard, r, c, dr, dc, color, targetLength) {
+    let cells = [{r, c}];
+    let nr = r + dr, nc = c + dc;
+    while (nr >= 0 && nr < GRID_SIZE && nc >= 0 && nc < GRID_SIZE && tempBoard[nr][nc] === color) {
+        cells.push({r: nr, c: nc});
+        nr += dr; nc += dc;
+    }
+    nr = r - dr; nc = c - dc;
+    while (nr >= 0 && nr < GRID_SIZE && nc >= 0 && nc < GRID_SIZE && tempBoard[nr][nc] === color) {
+        cells.push({r: nr, c: nc});
+        nr -= dr; nc -= dc;
+    }
+    return cells.length === targetLength ? cells : null;
+}
+
+// 4つ、5つ並びを判定
+function checkExactLines(tempBoard, r, c, color) {
+    const dirs = [[0,1], [1,0], [1,1], [1,-1]];
+    let line4 = null, line5 = null;
+    for (let [dr, dc] of dirs) {
+        if (!line4) line4 = getExactLine(tempBoard, r, c, dr, dc, color, 4);
+        if (!line5) line5 = getExactLine(tempBoard, r, c, dr, dc, color, 5);
+    }
+    return { has4: !!line4, line4, has5: !!line5, line5 };
+}
+
+function startGame() {
+    board = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(null));
+    gameOver = false;
+    lastMove = null;
+    winningCells = [];
+    blinkVisible = true;
+    if (blinkInterval) clearInterval(blinkInterval);
+    
+    const isPlayerFirst = document.querySelector('input[name="firstPlayer"]:checked').value === 'player';
+    playerColor = isPlayerFirst ? 'O' : 'X';
+    aiColor = isPlayerFirst ? 'X' : 'O';
+    currentPlayer = 'O';
+
+    updateStatus();
+    drawBoard();
+
+    if (aiColor === 'O') setTimeout(makeAIMove, 100);
+}
+
+function updateStatus() {
+    if (gameOver) return;
+    if (currentPlayer === playerColor) {
+        statusDisplay.innerText = "あなたの番です。置くか、相手の4並びをタップ！";
+        statusDisplay.style.color = "#2c3e50";
+    } else {
+        statusDisplay.innerText = "AIが数千回の脳内シミュレーション中...";
+        statusDisplay.style.color = "#e67e22";
+    }
+}
+
+function drawBoard() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (lastMove) {
+        ctx.fillStyle = 'rgba(241, 196, 15, 0.3)';
+        ctx.fillRect(lastMove.c * CELL_SIZE, lastMove.r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+    }
+
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 2;
+    for (let i = 0; i <= GRID_SIZE; i++) {
+        ctx.beginPath(); ctx.moveTo(i * CELL_SIZE, 0); ctx.lineTo(i * CELL_SIZE, canvas.height); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, i * CELL_SIZE); ctx.lineTo(canvas.width, i * CELL_SIZE); ctx.stroke();
+    }
+
+    for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+            const isWinningCell = winningCells.some(cell => cell.r === r && cell.c === c);
+            if (isWinningCell && !blinkVisible) continue;
+            if (board[r][c] === 'O') drawO(r, c);
+            if (board[r][c] === 'X') drawX(r, c);
+        }
+    }
+}
+
+function drawO(r, c) {
+    const cx = c * CELL_SIZE + CELL_SIZE / 2, cy = r * CELL_SIZE + CELL_SIZE / 2;
+    ctx.beginPath(); ctx.arc(cx, cy, CELL_SIZE * 0.35, 0, Math.PI * 2);
+    ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 4; ctx.stroke();
+}
+
+function drawX(r, c) {
+    const cx = c * CELL_SIZE + CELL_SIZE / 2, cy = r * CELL_SIZE + CELL_SIZE / 2, offset = CELL_SIZE * 0.28;
+    ctx.beginPath(); ctx.moveTo(cx - offset, cy - offset); ctx.lineTo(cx + offset, cy + offset);
+    ctx.moveTo(cx + offset, cy - offset); ctx.lineTo(cx - offset, cy + offset);
+    ctx.strokeStyle = '#3498db'; ctx.lineWidth = 4; ctx.stroke();
+}
+
+function endGame(winnerName, message, winCells = []) {
+    gameOver = true;
+    statusDisplay.innerText = message;
+    statusDisplay.style.color = winnerName === 'あなた' ? '#27ae60' : '#c0392b';
+    if (winCells.length > 0) {
+        winningCells = winCells;
+        blinkInterval = setInterval(() => { blinkVisible = !blinkVisible; drawBoard(); }, 400);
+    }
+}
+
+// プレイヤークリック
+canvas.addEventListener('click', (e) => {
+    if (gameOver || currentPlayer !== playerColor) return;
+    const rect = canvas.getBoundingClientRect();
+    const c = Math.floor((e.clientX - rect.left) / CELL_SIZE);
+    const r = Math.floor((e.clientY - rect.top) / CELL_SIZE);
+
+    if (board[r][c] === aiColor) {
+        const result = checkExactLines(board, r, c, aiColor);
+        if (result.has4) endGame('あなた', `見事！相手の4並びを指摘しました！ あなたの勝利！`, result.line4);
+        else {
+            let oldText = statusDisplay.innerText;
+            statusDisplay.innerText = "そこは4つ並んでいません！"; statusDisplay.style.color = "red";
+            setTimeout(() => { if(!gameOver) { statusDisplay.innerText = oldText; statusDisplay.style.color = "#2c3e50"; } }, 1500);
+        }
+        return;
+    }
+
+    if (board[r][c] === null) {
+        board[r][c] = playerColor;
+        lastMove = {r, c};
+        const result = checkExactLines(board, r, c, playerColor);
+        if (result.has5) { drawBoard(); endGame('あなた', `5つ並べました！ あなたの勝利！`, result.line5); return; }
+        if (board.flat().every(cell => cell !== null)) { drawBoard(); endGame('引き分け', "マスが埋まりました。引き分けです！"); return; }
+        
+        currentPlayer = aiColor;
+        drawBoard();
+        updateStatus();
+        setTimeout(makeAIMove, 50); // 描画を待ってからAI思考へ
+    }
+});
+
+// ==== AI モンテカルロシミュレーション部分 ====
+
+// 盤面状態からランダムにゲームを最後までプレイし、勝者の色を返す
+function playRandomGame(tempBoard, nextTurnColor) {
+    let emptyCells = [];
+    for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+            if (tempBoard[r][c] === null) emptyCells.push({r, c});
+        }
+    }
+    
+    // 空きマスをランダムにシャッフル
+    for (let i = emptyCells.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [emptyCells[i], emptyCells[j]] = [emptyCells[j], emptyCells[i]];
+    }
+
+    let turn = nextTurnColor;
+    for (let move of emptyCells) {
+        tempBoard[move.r][move.c] = turn;
+        let lines = checkExactLines(tempBoard, move.r, move.c, turn);
+        
+        // 5つ並べばそのターンの人の勝ち
+        if (lines.has5) return turn;
+        // 4つ並べば指摘されて負け（相手の勝ち）
+        if (lines.has4) return turn === aiColor ? playerColor : aiColor;
+
+        turn = (turn === aiColor) ? playerColor : aiColor;
+    }
+    return null; // 引き分け
+}
+
+function makeAIMove() {
+    if (gameOver) return;
+
+    // 1. プレイヤーの4並び即指摘
+    for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+            if (board[r][c] === playerColor) {
+                const result = checkExactLines(board, r, c, playerColor);
+                if (result.has4) {
+                    endGame('AI', `AIがあなたの4並びを指摘！ コンピューターの勝利！`, result.line4);
+                    return;
+                }
+            }
+        }
+    }
+
+    let bestScore = -Infinity;
+    let bestMoves = [];
+
+    for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+            if (board[r][c] === null) {
+                
+                // 【絶対条件】ここに置いて自分が4になってしまう自爆手は絶対避ける
+                board[r][c] = aiColor;
+                if (checkExactLines(board, r, c, aiColor).has4) {
+                    board[r][c] = null;
+                    continue;
+                }
+                
+                // 【絶対条件】ここに置いて自分が5になるなら即置き（必勝）
+                if (checkExactLines(board, r, c, aiColor).has5) {
+                    executeAIMove(r, c);
+                    return;
+                }
+                board[r][c] = null;
+
+                // 【絶対条件】相手が次にここに置いたら5になるなら阻止（必防）
+                board[r][c] = playerColor;
+                let mustBlock = checkExactLines(board, r, c, playerColor).has5;
+                board[r][c] = null;
+                if (mustBlock) {
+                    executeAIMove(r, c);
+                    return;
+                }
+
+                // モンテカルロシミュレーションの実行
+                let winCount = 0;
+                for (let i = 0; i < SIMULATION_COUNT; i++) {
+                    // 盤面のコピーを作成して架空プレイ
+                    let simBoard = board.map(row => [...row]);
+                    simBoard[r][c] = aiColor; // 最初の手を打つ
+                    
+                    let winner = playRandomGame(simBoard, playerColor);
+                    if (winner === aiColor) winCount++;
+                    else if (winner === playerColor) winCount--; // 負けは減点
+                }
+
+                if (winCount > bestScore) {
+                    bestScore = winCount;
+                    bestMoves = [{r, c}];
+                } else if (winCount === bestScore) {
+                    bestMoves.push({r, c});
+                }
+            }
+        }
+    }
+
+    // 手の決定（同点の手があればランダム）
+    if (bestMoves.length > 0) {
+        let move = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+        executeAIMove(move.r, move.c);
+    }
+}
+
+// 実際にAIが石を置く処理
+function executeAIMove(r, c) {
+    board[r][c] = aiColor;
+    lastMove = {r, c};
+    
+    const result = checkExactLines(board, r, c, aiColor);
+    if (result.has5) {
+        drawBoard();
+        endGame('AI', `コンピューターが5つ並べました！ AIの勝利！`, result.line5);
+        return;
+    }
+
+    if (board.flat().every(cell => cell !== null)) {
+        drawBoard();
+        endGame('引き分け', "マスが埋まりました。引き分けです！");
+        return;
+    }
+
+    currentPlayer = playerColor;
+    drawBoard();
+    updateStatus();
+}
+
+// 初回起動
+startGame();
+
+</script>
+</body>
+</html>

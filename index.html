@@ -90,7 +90,6 @@
         #gameCanvas { 
             width: 100%; max-width: 480px; aspect-ratio: 1 / 1; height: auto; 
             background-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 4px; cursor: pointer; 
-            /* タッチデバイスでのハイライトを無効化 */
             -webkit-tap-highlight-color: transparent; 
         }
 
@@ -104,7 +103,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; box-sizing: border-box;
         }
         .modal-content h3 { margin-top: 0; color: #2c3e50; font-size: 1.2rem; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
-        .modal-content p { line-height: 1.5; color: #333; font-size: 0.9rem; }
+        .modal-content p { line-height: 1.6; color: #333; font-size: 0.95rem; }
         
         .copyright { font-size: 0.75rem; color: #7f8c8d; margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ccc; line-height: 1.4; }
         
@@ -170,8 +169,7 @@
         <div class="modal-content">
             <div id="help-page-0">
                 <h3 id="ui-m-title">基本の遊び方と戦略</h3>
-                <p id="ui-m-text1">【基本ルール】<br>交互に石を置き、先に5個並べた方が勝ちです。</p>
-                <p id="ui-m-text2">【特殊ルール】<br>相手が「ちょうど4個」並べた箇所をタップすると指摘成功となり勝利します。自分が4個作ると負けるため、注意が必要です。</p>
+                <p id="ui-m-text1"></p>
                 <div class="copyright" id="ui-copyright"></div>
                 <div class="modal-nav">
                     <button class="modal-btn btn-adv" id="ui-btn-adv" onclick="changeHelpPage(1)">更に詳細解説</button>
@@ -333,10 +331,9 @@ const i18n = {
         p1First: "あなたが先手", aiFirst: "CPUが先手", cpuLevelLabel: "CPUの強さ：",
         lv1: "初心者", lv2: "普通", lv3: "強い", lv4: "最強",
         startBtn: "ゲーム開始<br>／リセット", statusInit: "ゲームを開始してください",
-        statusP1: "あなた({mark})の番です。石を置くか、相手の4並びの箇所をタップで指摘して下さい。", statusAI: "AIが思考中...",
+        statusP1: "あなた({mark})の番です。駒を置くか、相手の4並びの箇所をタップで指摘して下さい。", statusAI: "AIが思考中...",
         mTitle: "基本の遊び方と戦略",
-        mText1: "【基本ルール】<br>交互に石を置き、先に5個並べた方が勝ちです。",
-        mText2: "【特殊ルール】<br>相手が「ちょうど4個」並べた箇所をタップすると指摘成功となり勝利します。自分が4個作ると負けるため、注意が必要です。",
+        mText1: "【基本ルール】<br>駒が縦、横または斜めの直線で並んだ数で勝敗が決まります。<br>先攻、後攻を決めて開始し、交互の番に①②のいずれかを果たすと勝ちとなります。<br><br>①相手の駒が４個並んでいる箇所を指摘する。<br>②自分の駒を置いて５個並べる。<br><br><span style='color: #e74c3c; font-weight: bold;'>注意：自分が4個並べると相手に指摘されて負けるため、注意が必要です。</span>",
         copyright: "本ゲームは個人での利用・紹介・URLの共有を自由に行っていただけます。ただし、商用目的で利用（掲載・転載等）される場合は、必ず開発者の許可を得るようお願いいたします。<br>開発者：{dev}　Ver.2026APR",
         advBtn: "更に詳細解説", closeBtn: "閉じる", nextBtn: "次へ →", backBtn: "← 戻る",
         p1Title: "戦略1：四個の強制（トラップ）",
@@ -357,8 +354,7 @@ const i18n = {
         startBtn: "Start<br>/ Reset", statusInit: "Please start the game.",
         statusP1: "Your turn ({mark})! Place a stone or tap opponent's 4-in-a-row to win.", statusAI: "AI is thinking...",
         mTitle: "Rules & Strategies",
-        mText1: "[Basic Rule]<br>Take turns placing stones. Align exactly 5 to win.",
-        mText2: "[Special Rule]<br>If your opponent makes exactly 4-in-a-row, tap it to win instantly! Do not make 4-in-a-row yourself, or you lose.",
+        mText1: "[Basic Rules]<br>The outcome is determined by the number of stones aligned vertically, horizontally, or diagonally.<br>Decide who goes first, and on your turn, achieve either 1 or 2 to win.<br><br>1. Point out a spot where the opponent has exactly 4 stones in a row.<br>2. Place your stone to make exactly 5 in a row.<br><br><span style='color: #e74c3c; font-weight: bold;'>Warning: If you make 4 in a row yourself, your opponent can point it out and you will lose.</span>",
         copyright: "This game is free for personal use, sharing, and linking. However, for commercial use, you must obtain permission from the developer.<br>Developer: {dev} Ver.2026APR",
         advBtn: "Advanced Strategy", closeBtn: "Close", nextBtn: "Next →", backBtn: "← Back",
         p1Title: "Strategy 1: The 4-Trap",
@@ -379,8 +375,7 @@ const i18n = {
         startBtn: "开始<br>/ 重置", statusInit: "请开始游戏",
         statusP1: "轮到您({mark})了！请落子或点击对手的4连位置指出。", statusAI: "AI 思考中...",
         mTitle: "规则与策略",
-        mText1: "【基础规则】<br>交替落子，先连成刚好5子者获胜。",
-        mText2: "【特殊规则】<br>若对手连成刚好4子，点击它即可立即获胜！请注意，若您自己连成4子将会落败。",
+        mText1: "【基础规则】<br>胜负由垂直、水平或对角线上连成一线的棋子数量决定。<br>决定先后手后开始游戏，在轮到您时达成①或②即可获胜。<br><br>① 指出对手刚好连成4子的位置。<br>② 放置自己的棋子刚好连成5子。<br><br><span style='color: #e74c3c; font-weight: bold;'>注意：如果您自己连成了4子，被对手指出后将会落败，请务必小心。</span>",
         copyright: "本游戏可免费用于个人游玩与分享。但若用于商业目的，请务必取得开发者授权。<br>开发者：{dev} 版本：2026APR",
         advBtn: "进阶策略", closeBtn: "关闭", nextBtn: "下一页 →", backBtn: "← 返回",
         p1Title: "策略 1：逼四陷阱",
@@ -417,7 +412,6 @@ function selectLanguage(lang) {
     
     document.getElementById('ui-m-title').innerText = t.mTitle;
     document.getElementById('ui-m-text1').innerHTML = t.mText1;
-    document.getElementById('ui-m-text2').innerHTML = t.mText2;
     document.getElementById('ui-copyright').innerHTML = t.copyright.replace('{dev}', t.devName);
     document.getElementById('ui-btn-adv').innerText = t.advBtn;
     document.getElementById('ui-btn-close0').innerText = t.closeBtn;
@@ -607,7 +601,8 @@ let blinkVisible = true;
 let blinkInterval = null;
 
 let fatalCountdownTimer = null;
-let fatalTimeLeft = 10;
+// タイマーを30秒に変更
+let fatalTimeLeft = 30;
 
 function startGame() {
     board = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(null));
@@ -668,7 +663,8 @@ function checkAndStartFatalCountdown() {
     }
     
     if (emptyCells.length > 1 && allFatal) {
-        fatalTimeLeft = 10;
+        // タイマーを30秒に変更
+        fatalTimeLeft = 30;
         updateFatalStatus();
         fatalCountdownTimer = setInterval(() => {
             fatalTimeLeft--;
@@ -721,12 +717,9 @@ function endGame(winnerName, messageKey, winCells = []) {
     }
 }
 
-// 【バグ修正】スマホなどで縮小されたCanvasでの座標計算のズレを解消
 canvas.addEventListener('click', (e) => {
     if (gameOver || currentPlayer !== playerColor) return;
     const rect = canvas.getBoundingClientRect();
-    
-    // CSSでリサイズされた際の縮小率を計算して補正
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
     
@@ -736,7 +729,6 @@ canvas.addEventListener('click', (e) => {
     const c = Math.floor(x / CELL_SIZE);
     const r = Math.floor(y / CELL_SIZE);
 
-    // 枠外のクリックは無視
     if(c < 0 || c >= GRID_SIZE || r < 0 || r >= GRID_SIZE) return;
 
     if (board[r][c] === aiColor) {
@@ -846,4 +838,3 @@ drawBoard();
 </script>
 </body>
 </html>
-

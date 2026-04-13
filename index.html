@@ -25,13 +25,13 @@
         #game-screen { display: none; justify-content: flex-start; padding-top: 10px; }
         
         /* ---- 1ページ目 (言語選択 & デモ) ---- */
-        .title-group { text-align: center; height: 80px; margin-bottom: 10px; }
+        .title-group { text-align: center; height: 50px; margin-bottom: 5px; }
         h1.main-title { margin: 0; font-size: 2.2rem; color: #2c3e50; transition: all 0.3s ease; }
-        h2.sub-title { margin: 5px 0 0 0; font-size: 1.1rem; color: #7f8c8d; transition: all 0.3s ease; }
+        h2.sub-title { margin: 10px 0 15px 0; font-size: 1.1rem; color: #7f8c8d; transition: all 0.3s ease; }
         
         #demoCanvas {
             background-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-radius: 4px; margin-bottom: 20px; 
+            border-radius: 4px; margin-bottom: 5px; 
             width: 45vmin; max-width: 240px; aspect-ratio: 1 / 1; height: auto;
         }
         
@@ -90,6 +90,8 @@
         #gameCanvas { 
             width: 100%; max-width: 480px; aspect-ratio: 1 / 1; height: auto; 
             background-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 4px; cursor: pointer; 
+            /* タッチデバイスでのハイライトを無効化 */
+            -webkit-tap-highlight-color: transparent; 
         }
 
         /* ---- モーダル（ポップアップ） ---- */
@@ -126,10 +128,11 @@
     <div id="lang-screen">
         <div class="title-group">
             <h1 class="main-title" id="ui-main-title">五個並べ</h1>
-            <h2 class="sub-title" id="ui-sub-title">言語を選択して下さい</h2>
         </div>
         
         <canvas id="demoCanvas" width="240" height="240"></canvas>
+        
+        <h2 class="sub-title" id="ui-sub-title">言語を選択して下さい</h2>
         
         <button id="btn-lang-ja" class="lang-btn" onmouseover="pauseCycle('ja')" onmouseout="resumeCycle()" onclick="selectLanguage('ja')">日本語</button>
         <button id="btn-lang-en" class="lang-btn" onmouseover="pauseCycle('en')" onmouseout="resumeCycle()" onclick="selectLanguage('en')">English</button>
@@ -351,7 +354,7 @@ const i18n = {
         devName: "Gerald.T", title: "Make 5",
         p1First: "You go first", aiFirst: "CPU goes first", cpuLevelLabel: "CPU:",
         lv1: "Beginner", lv2: "Normal", lv3: "Strong", lv4: "Master",
-        startBtn: "Start<br>Reset", statusInit: "Please start the game.",
+        startBtn: "Start<br>/ Reset", statusInit: "Please start the game.",
         statusP1: "Your turn ({mark})! Place a stone or tap opponent's 4-in-a-row to win.", statusAI: "AI is thinking...",
         mTitle: "Rules & Strategies",
         mText1: "[Basic Rule]<br>Take turns placing stones. Align exactly 5 to win.",
@@ -373,7 +376,7 @@ const i18n = {
         devName: "田之信", title: "五子棋",
         p1First: "您先手", aiFirst: "电脑先手", cpuLevelLabel: "电脑强度:",
         lv1: "初级", lv2: "普通", lv3: "困难", lv4: "大师",
-        startBtn: "开始<br>重置", statusInit: "请开始游戏",
+        startBtn: "开始<br>/ 重置", statusInit: "请开始游戏",
         statusP1: "轮到您({mark})了！请落子或点击对手的4连位置指出。", statusAI: "AI 思考中...",
         mTitle: "规则与策略",
         mText1: "【基础规则】<br>交替落子，先连成刚好5子者获胜。",
@@ -664,7 +667,6 @@ function checkAndStartFatalCountdown() {
         }
     }
     
-    // 【変更箇所】空きマスが1つの時はカウントダウンを発動させない (emptyCells.length > 1)
     if (emptyCells.length > 1 && allFatal) {
         fatalTimeLeft = 10;
         updateFatalStatus();
@@ -719,11 +721,23 @@ function endGame(winnerName, messageKey, winCells = []) {
     }
 }
 
+// 【バグ修正】スマホなどで縮小されたCanvasでの座標計算のズレを解消
 canvas.addEventListener('click', (e) => {
     if (gameOver || currentPlayer !== playerColor) return;
     const rect = canvas.getBoundingClientRect();
-    const c = Math.floor((e.clientX - rect.left) / CELL_SIZE);
-    const r = Math.floor((e.clientY - rect.top) / CELL_SIZE);
+    
+    // CSSでリサイズされた際の縮小率を計算して補正
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
+    
+    const c = Math.floor(x / CELL_SIZE);
+    const r = Math.floor(y / CELL_SIZE);
+
+    // 枠外のクリックは無視
+    if(c < 0 || c >= GRID_SIZE || r < 0 || r >= GRID_SIZE) return;
 
     if (board[r][c] === aiColor) {
         const result = checkExactLines(board, r, c, aiColor);
@@ -832,3 +846,4 @@ drawBoard();
 </script>
 </body>
 </html>
+

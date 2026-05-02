@@ -16,6 +16,7 @@
             color: #333; box-sizing: border-box; padding: 10px;
         }
         
+        /* ---- 画面切り替え管理 ---- */
         #lang-screen, #game-screen { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             width: 100%; max-width: 500px; min-height: 100vh;
@@ -25,26 +26,27 @@
         /* ---- 1ページ目 (言語選択 & デモ) ---- */
         .title-group { 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 70px; margin-bottom: 10px; width: 100%;
+            height: 50px; margin-bottom: 10px; width: 100%;
         }
         h1.main-title { 
             margin: 0; font-size: 2.2rem; color: #2c3e50; 
             transition: all 0.3s ease; white-space: nowrap; line-height: 1.2;
         }
-        h2.sub-title { 
-            margin: 5px 0 0 0; font-size: 1.1rem; color: #7f8c8d; 
-            transition: all 0.3s ease; white-space: nowrap; line-height: 1.2;
-        }
         
         #demoCanvas {
             background-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-radius: 4px; margin-bottom: 5px; 
+            border-radius: 4px; margin-bottom: 10px; 
             width: 45vmin; max-width: 240px; aspect-ratio: 1 / 1; height: auto;
             flex-shrink: 0;
         }
+
+        h2.sub-title { 
+            margin: 5px 0 15px 0; font-size: 1.1rem; color: #7f8c8d; 
+            transition: all 0.3s ease; white-space: nowrap; line-height: 1.2; text-align: center;
+        }
         
         .lang-btn {
-            padding: 12px 30px; margin: 8px; font-size: 1.2rem;
+            padding: 12px 30px; margin: 6px; font-size: 1.2rem;
             background-color: #34495e; color: white; border: none; border-radius: 8px; cursor: pointer; 
             transition: all 0.3s ease; width: 200px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
@@ -54,7 +56,13 @@
 
         /* ---- 2ページ目 (ゲーム画面) ---- */
         .header-container { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px; }
-        h2.game-title { margin: 0; font-size: 1.6rem; color: #2c3e50; }
+        h2.game-title { margin: 0; font-size: 1.6rem; color: #2c3e50; white-space: nowrap;}
+        
+        .clock-display {
+            font-size: 1.1rem; font-weight: bold; color: #7f8c8d;
+            flex-grow: 1; text-align: center;
+        }
+
         .help-btn {
             background-color: #f1c40f; color: #fff; font-weight: bold; font-size: 1.5rem;
             border: none; border-radius: 50%; width: 42px; height: 42px; cursor: pointer;
@@ -124,12 +132,11 @@
         .btn-close { background-color: #e74c3c; } .btn-close:hover { background-color: #c0392b; }
         .btn-nav { background-color: #95a5a6; } .btn-nav:hover { background-color: #7f8c8d; }
 
-        /* ミニ図解（本編用） */
+        /* ミニ図解用CSS */
         .tutorial-diagram { display: flex; justify-content: center; margin: 10px 0; }
         .mini-board { display: grid; grid-template-columns: repeat(6, 25px); grid-template-rows: repeat(6, 25px); gap: 1px; background: #ccc; border: 2px solid #999; }
         .mini-cell { background: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; }
         
-        /* 【修正箇所】スマホでの縦並び崩れ防止。折り返し禁止(nowrap)とサイズ調整 */
         .pattern-container { display: flex; justify-content: center; gap: 8px; margin-top: 10px; flex-wrap: nowrap; align-items: center; }
         .mini-strip { display: flex; gap: 1px; background: #ccc; border: 2px solid #999; margin: 0 auto; width: max-content; }
         .strip-cell { width: 18px; height: 18px; background: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
@@ -141,13 +148,16 @@
 </head>
 <body>
 
+    <!-- 1ページ目：言語選択とデモ -->
     <div id="lang-screen">
         <div class="title-group">
             <h1 class="main-title" id="ui-main-title">五個並べ</h1>
-            <h2 class="sub-title" id="ui-sub-title">言語を選択して下さい</h2>
         </div>
         
         <canvas id="demoCanvas" width="240" height="240"></canvas>
+        
+        <!-- 【配置変更】盤面とボタンの間にメッセージを移設 -->
+        <h2 class="sub-title" id="ui-sub-title">言語を選択して下さい</h2>
         
         <div style="display: flex; flex-direction: column; gap: 5px;">
             <button id="btn-lang-ja" class="lang-btn" onmouseover="pauseCycle('ja')" onmouseout="resumeCycle()" onclick="selectLanguage('ja')">日本語</button>
@@ -156,9 +166,12 @@
         </div>
     </div>
 
+    <!-- 2ページ目：メインゲーム画面 -->
     <div id="game-screen">
         <div class="header-container">
             <h2 id="ui-title" class="game-title">五個並べ</h2>
+            <!-- 【新規追加】曜日と時間の表示 -->
+            <div id="ui-clock" class="clock-display"></div>
             <button class="help-btn" onclick="openHelpModal()">?</button>
         </div>
 
@@ -183,8 +196,10 @@
         <canvas id="gameCanvas" width="480" height="480"></canvas>
     </div>
 
+    <!-- ヘルプ・チュートリアルモーダル -->
     <div id="help-modal">
         <div class="modal-content">
+            <!-- Page 0: 基本ルール -->
             <div id="help-page-0">
                 <h3 id="ui-m-title">基本の遊び方と戦略</h3>
                 <p id="ui-m-text1"></p>
@@ -195,6 +210,7 @@
                 </div>
             </div>
 
+            <!-- Page 1: 4つ並ぶパターン -->
             <div id="help-page-1" style="display:none;">
                 <h3 id="ui-m-p1-title">駒が4個並ぶパターン</h3>
                 <p id="ui-m-p1-top"></p>
@@ -223,6 +239,7 @@
                 </div>
             </div>
 
+            <!-- Page 2: 5つ並ぶパターン -->
             <div id="help-page-2" style="display:none;">
                 <h3 id="ui-m-p2-title">駒が5個並ぶパターン</h3>
                 <p id="ui-m-p2-top"></p>
@@ -251,6 +268,7 @@
                 </div>
             </div>
 
+            <!-- Page 3 -->
             <div id="help-page-3" style="display:none;">
                 <h3 id="ui-m-p3-title">戦略1：四個の強制（トラップ）</h3>
                 <p id="ui-m-p3-desc"></p>
@@ -272,6 +290,7 @@
                 </div>
             </div>
 
+            <!-- Page 4 -->
             <div id="help-page-4" style="display:none;">
                 <h3 id="ui-m-p4-title">戦略2：終盤の自滅回避</h3>
                 <p id="ui-m-p4-desc"></p>
@@ -293,7 +312,28 @@
 const GRID_SIZE = 6;
 
 // ==========================================
-// 1. 言語表示連動アニメーション (Page 1)
+// 1. 時計表示機能
+// ==========================================
+function updateClock() {
+    const now = new Date();
+    const days = {
+        ja: ['日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜'],
+        en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+        zh: ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+    };
+    const dayStr = days[currentLang][now.getDay()];
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    
+    const clockEl = document.getElementById('ui-clock');
+    if (clockEl) {
+        clockEl.innerText = `${dayStr} ${h}:${m}`;
+    }
+}
+setInterval(updateClock, 1000); // 1秒ごとに更新
+
+// ==========================================
+// 2. 言語表示連動アニメーション (Page 1)
 // ==========================================
 const langPreviewData = {
     ja: { title: "五個並べ", sub: "言語を選択して下さい" },
@@ -330,7 +370,7 @@ function pauseCycle(lang) { if(cycleTimer) clearInterval(cycleTimer); updateLang
 function resumeCycle() { startCycle(); }
 
 // ==========================================
-// 2. 共通ロジック
+// 3. 共通ロジック
 // ==========================================
 function getExactLine(boardArr, r, c, dr, dc, color, targetLength) {
     let cells = [{r, c}];
@@ -391,7 +431,7 @@ function simulateRandom(tempBoard, nextTurnColor, aiColorRef, playerColorRef) {
     return null;
 }
 
-function drawStone(context, type, r, c, size, weight) {
+function drawPiece(context, type, r, c, size, weight) {
     const cx = c * size + size / 2, cy = r * size + size / 2;
     context.beginPath(); context.lineWidth = weight;
     if (type === 'O') {
@@ -408,7 +448,7 @@ function drawStone(context, type, r, c, size, weight) {
 
 
 // ==========================================
-// 3. 多言語辞書とUI設定
+// 4. 多言語辞書とUI設定
 // ==========================================
 const i18n = {
     ja: {
@@ -416,10 +456,10 @@ const i18n = {
         p1First: "あなたが先手", aiFirst: "CPUが先手", cpuLevelLabel: "CPUの強さ：",
         lv1: "初心者", lv2: "普通", lv3: "強い", lv4: "最強",
         startBtn: "ゲーム開始<br>／リセット", statusInit: "ゲームを開始してください",
-        statusP1: "あなた({mark})の番です。石を置くか、相手の4並びの箇所をタップで指摘して下さい。", statusAI: "AIが思考中...",
+        statusP1: "あなた({mark})の番です。駒を置くか、相手の4並びの箇所をタップで指摘して下さい。", statusAI: "AIが思考中...",
         mTitle: "基本の遊び方と戦略",
-        mText1: "【基本ルール】<br>石が縦、横または斜めの直線で並んだ数で勝敗が決まります。<br>先攻、後攻を決めて開始し、交互の番に①②のいずれかを果たすと勝ちとなります。<br><br>①相手の駒が４個並んでいる箇所を指摘する。<br>②自分の駒を置いて５個並べる。<br><br><span style='color: #e74c3c; font-weight: bold;'>注意：自分が4個並べると相手に指摘されて負けるため、注意が必要です。</span>",
-        copyright: "本ゲームは個人での利用・紹介・URLの共有を自由に行っていただけます。ただし、商用目的で利用（掲載・転載等）される場合は、必ず開発者の許可を得るようお願いいたします。<br>開発者：{dev}　Ver.2026APR",
+        mText1: "【基本ルール】<br>駒が縦、横または斜めの直線で並んだ数で勝敗が決まります。<br>先攻、後攻を決めて開始し、交互の番に①②のいずれかを果たすと勝ちとなります。<br><br>①相手の駒が４個並んでいる箇所を指摘する。<br>②自分の駒を置いて５個並べる。<br><br><span style='color: #e74c3c; font-weight: bold;'>注意：自分が4個並べると相手に指摘されて負けるため、注意が必要です。</span>",
+        copyright: "本ゲームは個人での利用・紹介・URLの共有を自由に行なっていただけます。ただし、商用目的で利用（掲載・転載等）される場合は、必ず開発者の許可を得るようお願いいたします。<br>開発者：{dev}　Ver.2026APR",
         advBtn: "更に詳細解説", closeBtn: "閉じる", nextBtn: "次へ →", backBtn: "← 戻る",
         mP1Title: "駒が4個並ぶパターン",
         mP1Top: "４つの駒が並ぶには大まかに次の２つのパターンとなります。",
@@ -430,7 +470,7 @@ const i18n = {
         mP2Bot: "５つの駒が並んだ際は、自動的に５つの駒を並べた者が勝ちとなります。",
         mP2Note: "備考：駒が並ぶ数が２個、３個、６個の状態ではゲーム進行上に影響はありません。",
         mP3Title: "戦略1：四個の強制（トラップ）",
-        mP3Desc: "自身の駒が４つ並ぶと負けてしまう為、通常では４つ並べようとは相手は考えません。また相手の駒が５つ並ぶと自身が負けてしまうので、こちらが５つ並べようとすると相手は阻止する為に駒を挟んできます。<br>そこで敢えてこちらの駒が５つ並べるの阻止する為に相手が駒を置くと相手の駒が４つ並ぶように誘導します。",
+        mP3Desc: "自身の駒が４つ並ぶと負けてしまう為、通常では相手は４つ並べようとは考えません。また相手の駒が５つ並ぶと自身が負けてしまうので、こちらが５つ並べようとすると相手は阻止する為に駒を挟んできます。<br>そこで敢えてこちらの駒が５つ並べるの阻止する為に相手が駒を置くと相手の駒が４つ並ぶように誘導します。",
         mP3Sub: "（図：×がブロックすると、縦に4つ並んで自滅する）",
         mP4Title: "戦略2：終盤の自滅回避",
         mP4Desc: "時には複数回連続で５つ並ばさないように相手の駒を間に置かせるような戦略を行ないます。<br>ただし後半になって空いているマスが少なくなってくると今度は如何に自分の駒が４個並ばないように置いていくかを配慮していかなければなりません。",
@@ -445,19 +485,19 @@ const i18n = {
         p1First: "You go first", aiFirst: "CPU goes first", cpuLevelLabel: "CPU:",
         lv1: "Beginner", lv2: "Normal", lv3: "Strong", lv4: "Master",
         startBtn: "Start<br>/ Reset", statusInit: "Please start the game.",
-        statusP1: "Your turn ({mark})! Place a stone or tap opponent's 4-in-a-row to win.", statusAI: "AI is thinking...",
+        statusP1: "Your turn ({mark})! Place a piece or tap opponent's 4-in-a-row to win.", statusAI: "AI is thinking...",
         mTitle: "Rules & Strategies",
-        mText1: "[Basic Rules]<br>The outcome is determined by the number of stones aligned vertically, horizontally, or diagonally.<br>Decide who goes first, and on your turn, achieve either 1 or 2 to win.<br><br>1. Point out a spot where the opponent has exactly 4 stones in a row.<br>2. Place your stone to make exactly 5 in a row.<br><br><span style='color: #e74c3c; font-weight: bold;'>Warning: If you make 4 in a row yourself, your opponent can point it out and you will lose.</span>",
+        mText1: "[Basic Rules]<br>The outcome is determined by the number of pieces aligned vertically, horizontally, or diagonally.<br>Decide who goes first, and on your turn, achieve either 1 or 2 to win.<br><br>1. Point out a spot where the opponent has exactly 4 pieces in a row.<br>2. Place your piece to make exactly 5 in a row.<br><br><span style='color: #e74c3c; font-weight: bold;'>Warning: If you make 4 in a row yourself, your opponent can point it out and you will lose.</span>",
         copyright: "This game is free for personal use, sharing, and linking. However, for commercial use, you must obtain permission from the developer.<br>Developer: {dev} Ver.2026APR",
         advBtn: "Advanced Strategy", closeBtn: "Close", nextBtn: "Next →", backBtn: "← Back",
         mP1Title: "4-in-a-Row Patterns",
         mP1Top: "There are generally two patterns to form a 4-in-a-row.",
-        mP1Bot: "If your opponent forms exactly 4-in-a-row, tap or click any of those 4 stones to point it out and claim your victory.",
+        mP1Bot: "If your opponent forms exactly 4-in-a-row, tap or click any of those 4 pieces to point it out and claim your victory.",
         mP1Note: "Note: If a 4-in-a-row is formed on the last (36th) square, the turn does not pass, meaning no one can point it out, resulting in a draw.",
         mP2Title: "5-in-a-Row Patterns",
         mP2Top: "There are generally two patterns to form a 5-in-a-row.",
-        mP2Bot: "When a 5-in-a-row is formed, the player who placed the 5th stone automatically wins.",
-        mP2Note: "Note: Having 2, 3, or 6 stones in a row does not affect the game's progression.",
+        mP2Bot: "When a 5-in-a-row is formed, the player who placed the 5th piece automatically wins.",
+        mP2Note: "Note: Having 2, 3, or 6 pieces in a row does not affect the game's progression.",
         mP3Title: "Strategy 1: The 4-Trap",
         mP3Desc: "Normally, a player won't make a 4-in-a-row to avoid losing. Also, you must block the opponent from making a 5-in-a-row.<br>Strategy: Force the opponent to place a block that results in their own 4-in-a-row!",
         mP3Sub: "(Diagram: If X blocks, X forms a vertical 4-in-a-row and loses)",
@@ -550,6 +590,7 @@ function selectLanguage(lang) {
     document.getElementById('ui-btn-back3').innerText = t.backBtn;
     document.getElementById('ui-btn-back4').innerText = t.backBtn;
 
+    updateClock(); // 言語切り替え時に時計も即時更新
     stopDemo();
     document.getElementById('lang-screen').style.display = 'none';
     document.getElementById('game-screen').style.display = 'flex';
@@ -575,7 +616,7 @@ function setControlsEnabled(enabled) {
 }
 
 // ==========================================
-// 4. トップ画面 デモプレイ
+// 5. トップ画面 デモプレイ
 // ==========================================
 let demoBoard = []; let demoTurn = 'O'; let demoTimer = null;
 let demoWinningCells = []; let demoBlinkVisible = true; let demoBlinkInterval = null;
@@ -589,7 +630,7 @@ function startDemo() {
     demoTurn = 'O'; 
     demoWinningCells = []; demoBlinkVisible = true;
     
-    // デモAIのレベルをランダムで設定（引き分け防止のため少しミスをしやすくする）
+    // 初心者(1)を除外した 2,3,4 からランダムにレベルを選択し対戦させる
     const demoLevels = [2, 3, 4];
     demoLvlO = demoLevels[Math.floor(Math.random() * demoLevels.length)];
     demoLvlX = demoLevels[Math.floor(Math.random() * demoLevels.length)];
@@ -607,10 +648,9 @@ function stopDemo() {
 
 function playDemoMove() {
     let currentLvl = demoTurn === 'O' ? demoLvlO : demoLvlX;
-    let simLimit = {2: 10, 3: 40, 4: 100}[currentLvl] || 20; // デモ用に少し弱体化して試合を動かす
+    let simLimit = {2: 10, 3: 40, 4: 100}[currentLvl] || 20; 
     let oppColor = demoTurn === 'O' ? 'X' : 'O';
 
-    // 相手が4つ並べていたら確実に指摘するロジック（人間がタップする代わり）
     for (let r = 0; r < GRID_SIZE; r++) {
         for (let c = 0; c < GRID_SIZE; c++) {
             if (demoBoard[r][c] === oppColor) {
@@ -626,9 +666,7 @@ function playDemoMove() {
 
     let bestMoves = []; let bestScore = -Infinity;
     
-    // 【劇的演出用】5%の確率で自分の4つ並び（自殺手）に気付かずに置いてしまう「うっかりミス」
     let blunder4 = Math.random() < 0.05;
-    // 【劇的演出用】5%の確率で相手の5つ並びをブロックし損ねる「うっかりミス」
     let missBlock5 = Math.random() < 0.05;
 
     for (let r = 0; r < GRID_SIZE; r++) {
@@ -715,7 +753,7 @@ function drawDemoBoard(lastR = -1, lastC = -1) {
         for (let c = 0; c < GRID_SIZE; c++) {
             const isWin = demoWinningCells.some(cell => cell.r === r && cell.c === c);
             if (isWin && !demoBlinkVisible) continue; 
-            if(demoBoard[r][c]) drawStone(demoCtx, demoBoard[r][c], r, c, DEMO_CELL, 3);
+            if(demoBoard[r][c]) drawPiece(demoCtx, demoBoard[r][c], r, c, DEMO_CELL, 3);
         }
     }
 }
@@ -723,7 +761,7 @@ startCycle();
 startDemo();
 
 // ==========================================
-// 5. メインゲーム
+// 6. メインゲーム
 // ==========================================
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
@@ -829,7 +867,7 @@ function drawBoard() {
         for (let c = 0; c < GRID_SIZE; c++) {
             const isWin = winningCells.some(cell => cell.r === r && cell.c === c);
             if (isWin && !blinkVisible) continue;
-            if (board[r][c]) drawStone(ctx, board[r][c], r, c, CELL_SIZE, 4);
+            if (board[r][c]) drawPiece(ctx, board[r][c], r, c, CELL_SIZE, 4);
         }
     }
 }
@@ -925,7 +963,6 @@ function makeAIMove() {
 
                 let winCount = 0;
                 
-                // 本編AIにも「6並び（無害）をスルーする」ペナルティを追加
                 if (myMax > 5) winCount -= 50;
                 if (oppMax > 5) winCount -= 50;
 

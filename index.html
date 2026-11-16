@@ -13,100 +13,135 @@
         body {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            color: #333; box-sizing: border-box; padding: 10px;
+            color: #333; box-sizing: border-box; padding: 5px;
         }
         
-        /* ---- 画面切り替え管理 ---- */
         #lang-screen, #game-screen { 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            width: 100%; max-width: 500px; min-height: 100vh;
+            width: 100%; max-width: 500px; height: 100vh;
         }
-        #game-screen { display: none; justify-content: flex-start; padding-top: 10px; min-height: auto; }
+        #game-screen { display: none; justify-content: flex-start; padding-top: 10px; height: auto; min-height: 100vh; }
         
         /* ---- 1ページ目 (言語選択 & デモ) ---- */
         .title-group { 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 50px; margin-bottom: 10px; width: 100%;
+            height: 45px; margin-bottom: 8px; width: 100%;
         }
         h1.main-title { 
             margin: 0; font-size: 2.2rem; color: #2c3e50; 
             transition: all 0.3s ease; white-space: nowrap; line-height: 1.2;
         }
-        
-        #demoCanvas {
-            background-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-radius: 4px; margin-bottom: 10px; 
-            width: 45vmin; max-width: 240px; aspect-ratio: 1 / 1; height: auto;
-            flex-shrink: 0;
-        }
-
         h2.sub-title { 
-            margin: 5px 0 15px 0; font-size: 1.1rem; color: #7f8c8d; 
+            margin: 8px 0 10px 0; font-size: 1.05rem; color: #7f8c8d; 
             transition: all 0.3s ease; white-space: nowrap; line-height: 1.2; text-align: center;
         }
         
+        #demoCanvas {
+            background-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 4px; margin-bottom: 5px; 
+            width: 42vmin; max-width: 230px; aspect-ratio: 1 / 1; height: auto;
+            flex-shrink: 0;
+        }
+        
         .lang-btn {
-            padding: 12px 30px; margin: 6px; font-size: 1.2rem;
+            padding: 10px 25px; margin: 5px; font-size: 1.15rem;
             background-color: #34495e; color: white; border: none; border-radius: 8px; cursor: pointer; 
-            transition: all 0.3s ease; width: 200px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease; width: 210px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         .lang-btn:hover, .lang-btn.active-lang { 
-            background-color: #2980b9; transform: scale(1.15); box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            background-color: #2980b9; transform: scale(1.12); box-shadow: 0 6px 12px rgba(0,0,0,0.2);
         }
 
         /* ---- 2ページ目 (ゲーム画面) ---- */
-        .header-container { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px; }
-        h2.game-title { margin: 0; font-size: 1.6rem; color: #2c3e50; white-space: nowrap;}
+        .header-container { 
+            display: flex; justify-content: space-between; align-items: center; 
+            width: 100%; margin-bottom: 8px; padding: 0 5px; box-sizing: border-box;
+        }
+        h2.game-title { margin: 0; font-size: 1.5rem; color: #2c3e50; white-space: nowrap; }
         
-        .clock-display {
-            font-size: 1.1rem; font-weight: bold; color: #7f8c8d;
-            flex-grow: 1; text-align: center;
+        #ui-clock {
+            font-weight: bold; color: #7f8c8d; font-size: 1.05rem;
+            text-align: center; flex-grow: 1; margin: 0 8px;
         }
 
         .help-btn {
-            background-color: #f1c40f; color: #fff; font-weight: bold; font-size: 1.5rem;
-            border: none; border-radius: 50%; width: 42px; height: 42px; cursor: pointer;
+            background-color: #f1c40f; color: #fff; font-weight: bold; font-size: 1.4rem;
+            border: none; border-radius: 50%; width: 38px; height: 38px; cursor: pointer;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: 0.2s;
             display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
         .help-btn:hover { background-color: #f39c12; transform: scale(1.1); }
 
         #controls {
-            display: flex; flex-direction: column; gap: 10px;
-            background: #fff; padding: 12px 20px; border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 10px; width: 100%; box-sizing: border-box;
+            display: flex; flex-direction: column; gap: 8px;
+            background: #fff; padding: 10px 12px; border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 8px; width: 100%; box-sizing: border-box;
         }
-        .control-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .radio-group { display: flex; flex-direction: column; gap: 5px; }
-        .radio-group label { cursor: pointer; font-weight: bold; color: #2c3e50; transition: color 0.3s; font-size: 0.95rem; }
+        .control-row { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 8px; }
+        .radio-group { display: flex; flex-direction: column; gap: 4px; }
+        .radio-group label { cursor: pointer; font-weight: bold; color: #2c3e50; transition: color 0.3s; font-size: 0.9rem; }
         .radio-group input:disabled + span { color: #aaa; cursor: not-allowed; }
         
-        .level-group { display: flex; align-items: center; gap: 5px; font-size: 0.85rem; flex-wrap: wrap; }
+        .action-btns { display: flex; gap: 6px; align-items: center; }
+
+        .start-btn {
+            padding: 8px 12px; font-size: 0.9rem; font-weight: bold; line-height: 1.25;
+            background-color: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; text-align: center; white-space: nowrap;
+        }
+        .start-btn:hover { background-color: #2ecc71; }
+        .start-btn.playing { background-color: #e74c3c; }
+        .start-btn.playing:hover { background-color: #c0392b; }
+
+        .undo-btn {
+            padding: 8px 10px; font-size: 0.85rem; font-weight: bold; line-height: 1.25;
+            background-color: #e67e22; color: white; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; text-align: center; white-space: nowrap;
+        }
+        .undo-btn:hover:not(:disabled) { background-color: #d35400; }
+        .undo-btn:disabled { background-color: #bdc3c7; cursor: not-allowed; opacity: 0.7; }
+        .undo-btn.highlight-undo {
+            background-color: #d35400;
+            box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.8);
+            animation: btnBlink 0.8s infinite alternate;
+        }
+        @keyframes btnBlink {
+            from { transform: scale(1); }
+            to { transform: scale(1.06); }
+        }
+
+        .level-group { display: flex; align-items: center; gap: 4px; font-size: 0.8rem; flex-wrap: wrap; }
         .level-label-text { font-weight: bold; color: #2c3e50; margin-right: 2px; }
         .level-group label {
-            background: #ecf0f1; padding: 5px 10px; border-radius: 20px; cursor: pointer; transition: 0.2s; font-weight: bold; color: #7f8c8d; margin: 0;
+            background: #ecf0f1; padding: 4px 8px; border-radius: 15px; cursor: pointer; transition: 0.2s; font-weight: bold; color: #7f8c8d; margin: 0;
         }
         .level-group input { display: none; }
         .level-group input:checked + span { color: #fff; }
         .level-group label:has(input:checked) { background: #3498db; }
         .level-group label.disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .start-btn {
-            padding: 8px 15px; font-size: 0.95rem; font-weight: bold; line-height: 1.3;
-            background-color: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; transition: 0.3s; text-align: center;
-        }
-        .start-btn:hover { background-color: #2ecc71; }
-
         #status { 
-            margin-bottom: 10px; font-size: 1rem; font-weight: bold; min-height: 3em; 
+            margin-bottom: 8px; font-size: 0.95rem; font-weight: bold; min-height: 2.8em; 
             display: flex; align-items: center; justify-content: center;
             text-align: center; width: 100%; padding: 0 5px; box-sizing: border-box; line-height: 1.3;
         }
         
+        /* 練習モード用アドバイスバナー */
+        #coach-banner {
+            display: none; width: 100%; box-sizing: border-box;
+            background-color: #fff3cd; border: 2px solid #ffc107; color: #856404;
+            padding: 8px 12px; border-radius: 6px; margin-bottom: 8px;
+            font-size: 0.9rem; font-weight: bold; text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); animation: pulseWarn 0.4s ease;
+        }
+        @keyframes pulseWarn {
+            0% { transform: scale(0.96); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
         #gameCanvas { 
-            width: 100%; max-width: 480px; aspect-ratio: 1 / 1; height: auto; 
+            width: 92vmin; max-width: 460px; aspect-ratio: 1 / 1; height: auto; 
             background-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 4px; cursor: pointer; 
-            -webkit-tap-highlight-color: transparent; 
+            -webkit-tap-highlight-color: transparent; flex-shrink: 0;
         }
 
         /* ---- モーダル（ポップアップ） ---- */
@@ -139,10 +174,13 @@
         
         .pattern-container { display: flex; justify-content: center; gap: 8px; margin-top: 10px; flex-wrap: nowrap; align-items: center; }
         .mini-strip { display: flex; gap: 1px; background: #ccc; border: 2px solid #999; margin: 0 auto; width: max-content; }
-        .strip-cell { width: 18px; height: 18px; background: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
-        .arrow-row { display: flex; justify-content: center; gap: 40px; font-size: 1.2rem; color: #7f8c8d; margin: 2px 0; font-weight: bold; }
+        .strip-cell { width: 20px; height: 20px; background: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
         
-        .c-O { color: #e74c3c; } .c-X { color: #3498db; } .c-O-target { background: rgba(241, 196, 15, 0.4); } 
+        .c-O { color: #e74c3c; } 
+        .c-X { color: #3498db; } 
+        .mini-cell.c-O-target, .strip-cell.c-O-target { background-color: #f3d060 !important; } 
+
+        .arrow-row { display: flex; justify-content: center; gap: 40px; font-size: 1.2rem; color: #7f8c8d; margin: 2px 0; font-weight: bold; }
         .pattern-note { font-size: 0.8rem; color: #666; margin-top: 10px; border-left: 3px solid #ccc; padding-left: 8px; }
     </style>
 </head>
@@ -156,10 +194,9 @@
         
         <canvas id="demoCanvas" width="240" height="240"></canvas>
         
-        <!-- 【配置変更】盤面とボタンの間にメッセージを移設 -->
         <h2 class="sub-title" id="ui-sub-title">言語を選択して下さい</h2>
         
-        <div style="display: flex; flex-direction: column; gap: 5px;">
+        <div style="display: flex; flex-direction: column; gap: 4px;">
             <button id="btn-lang-ja" class="lang-btn" onmouseover="pauseCycle('ja')" onmouseout="resumeCycle()" onclick="selectLanguage('ja')">日本語</button>
             <button id="btn-lang-en" class="lang-btn" onmouseover="pauseCycle('en')" onmouseout="resumeCycle()" onclick="selectLanguage('en')">English</button>
             <button id="btn-lang-zh" class="lang-btn" onmouseover="pauseCycle('zh')" onmouseout="resumeCycle()" onclick="selectLanguage('zh')">简体中文</button>
@@ -170,8 +207,7 @@
     <div id="game-screen">
         <div class="header-container">
             <h2 id="ui-title" class="game-title">五個並べ</h2>
-            <!-- 【新規追加】曜日と時間の表示 -->
-            <div id="ui-clock" class="clock-display"></div>
+            <span id="ui-clock"></span>
             <button class="help-btn" onclick="openHelpModal()">?</button>
         </div>
 
@@ -181,10 +217,14 @@
                     <label><input type="radio" name="firstPlayer" value="player" checked> <span id="ui-p1-first">あなたが先手</span></label>
                     <label><input type="radio" name="firstPlayer" value="ai"> <span id="ui-ai-first">CPUが先手</span></label>
                 </div>
-                <button id="ui-start-btn" class="start-btn" onclick="startGame()">ゲーム開始<br>／リセット</button>
+                <div class="action-btns">
+                    <button id="ui-undo-btn" class="undo-btn" onclick="undoMove()" disabled>待った<br>(残り1回)</button>
+                    <button id="ui-start-btn" class="start-btn" onclick="handleStartResetClick()">ゲーム開始</button>
+                </div>
             </div>
             <div class="level-group" id="level-container">
                 <span class="level-label-text" id="ui-cpu-level-label">CPUの強さ：</span>
+                <label><input type="radio" name="cpuLevel" value="0"> <span id="ui-lv0">練習</span></label>
                 <label><input type="radio" name="cpuLevel" value="1"> <span id="ui-lv1">初心者</span></label>
                 <label><input type="radio" name="cpuLevel" value="2" checked> <span id="ui-lv2">普通</span></label>
                 <label><input type="radio" name="cpuLevel" value="3"> <span id="ui-lv3">強い</span></label>
@@ -193,13 +233,14 @@
         </div>
 
         <div id="status"></div>
+        <div id="coach-banner"></div>
         <canvas id="gameCanvas" width="480" height="480"></canvas>
     </div>
 
     <!-- ヘルプ・チュートリアルモーダル -->
     <div id="help-modal">
         <div class="modal-content">
-            <!-- Page 0: 基本ルール -->
+            <!-- Page 0 -->
             <div id="help-page-0">
                 <h3 id="ui-m-title">基本の遊び方と戦略</h3>
                 <p id="ui-m-text1"></p>
@@ -304,36 +345,163 @@
 
 <script>
 /**
- * 6x6 五個並べ - Ver.2026APR
- * Developer: に〜はお田中 (Gerald.T / 田之信)
+ * 6x6 五個並べ - Ver.2026NOV(Since 2026APR)
+ * Developer: に〜はお田中 (Mr.Gerald / 田之信)
  * Coded by: 6M
  */
 
 const GRID_SIZE = 6;
+let currentLang = 'ja';
 
 // ==========================================
-// 1. 時計表示機能
+// 1. 多言語辞書データ
+// ==========================================
+const i18n = {
+    ja: {
+        devName: "に〜はお田中", title: "五個並べ",
+        p1First: "あなたが先手", aiFirst: "CPUが先手", cpuLevelLabel: "CPUの強さ：",
+        lv0: "練習", lv1: "初心者", lv2: "普通", lv3: "強い", lv4: "最強",
+        startBtnIdle: "ゲーム開始", startBtnPlaying: "リセット",
+        confirmReset: "試合中です。リセットしますか？",
+        undoBtn: "待った<br>(残り{n}回)", undoBtnInf: "待った<br>(練習無制限)", undoBtnUsed: "待った<br>(使用済)",
+        statusInit: "先手・後手とCPUの強さを選んで「ゲーム開始」を押してください",
+        statusP1: "あなた({mark})の番です。駒を置くか、相手の4並びの箇所をタップで指摘して下さい。", statusAI: "AIが思考中...",
+        mTitle: "基本の遊び方と戦略",
+        mText1: "【基本ルール】<br>駒が縦、横または斜めの直線で並んだ数で勝敗が決まります。<br>先攻、後攻を決めて開始し交互に行い、自身の番に①②のいずれかを果たすと勝ちとなります。<br><br>①相手の駒が４個並んでいる箇所を指摘する。<br>②自分の駒を置いて５個並べる。<br><br><span style='color: #e74c3c; font-weight: bold;'>注意：自分が4個並べると相手に指摘されて負けるため、注意が必要です。</span>",
+        copyright: "本ゲームは個人での利用・紹介・URLの共有を自由に行なっていただけます。ただし、商用目的で利用（掲載・転載等）される場合は、必ず開発者の許可を得るようお願いいたします。<br>開発者：{dev} Ver.2026NOV(Since 2026APR)",
+        advBtn: "更に詳細解説", closeBtn: "閉じる", nextBtn: "次へ →", backBtn: "← 戻る",
+        mP1Title: "駒が4個並ぶパターン",
+        mP1Top: "４つの駒が並ぶには大まかに次の２つのパターンとなります。",
+        mP1Bot: "相手の駒が４つ並んだ際は、当該４つの駒のいずれかをタップまたはクリックすることで指摘したことになり、あなたの勝ちとなります。",
+        mP1Note: "備考：最後のマス(36マス目)で４つ並んだ場合はつぎの番には回らない為＝指摘する者がいない為、引き分けとなります。",
+        mP2Title: "駒が5個並ぶパターン",
+        mP2Top: "５つの駒が並ぶには大まかに次の２つのパターンとなります。",
+        mP2Bot: "５つの駒が並んだ際は、自動的に５つの駒を並べた者が勝ちとなります。",
+        mP2Note: "備考：駒が並ぶ数が２個、３個、６個の状態ではゲーム進行上に影響はありません。",
+        mP3Title: "戦略1：四個の強制（トラップ）",
+        mP3Desc: "自身の駒が４つ並ぶと負けてしまう為、通常では相手は４つ並べようとは考えません。また相手の駒が５つ並ぶと自身が負けてしまうので、こちらが５つ並べようとすると相手は阻止する為に駒を挟んできます。<br>そこで敢えてこちらの駒が５つ並べるの阻止する為に相手が駒を置くと相手の駒が４つ並ぶように誘導します。",
+        mP3Sub: "（図：×がブロックすると、縦に4つ並んで自滅する）",
+        mP4Title: "戦略2：終盤の自滅回避",
+        mP4Desc: "時には複数回連続で５つ並ばさないように相手の駒を間に置かせるような戦略を行ないます。<br>ただし後半になって空いているマスが少なくなってくると今度は如何に自分の駒が４個並ばないように置いていくかを配慮していかなければなりません。",
+        msgWinPoint: "見事！相手の4並びを指摘しました！ あなたの勝利！",
+        msgWin5: "5つ並べました！ あなたの勝利！", msgDraw: "マスが埋まりました。引き分けです！",
+        msgAIWinPoint: "AIがあなたの4並びを指摘！ コンピューターの勝利！",
+        msgAIWin5: "コンピューターが5つ並べました！ AIの勝利！", msgNot4: "そこは4つ並んでいません！",
+        msgFatalCount: "全て4個並んでしまいます！ あと {sec} 秒",
+        coachWin5: "【練習アドバイス】今、他に置くとあなたは勝てますよ！ →「待った」を押す",
+        coachPoint4: "【練習アドバイス】今、相手の4並びを指摘すればあなたは勝てますよ！ →「待った」を押す",
+        coachMustBlock: "【練習アドバイス】今ここに置かないと次に相手が勝ちますよ！ →「待った」を押す",
+        coachSelf4: "【練習アドバイス】今ここに置いたら自分が4個並び、次に相手が勝ちますよ！ →「待った」を押す",
+        coachGiveWin: "【練習アドバイス】今ここに置いたら次に相手が勝ちますよ！ →「待った」を押す",
+        coachStalemate: "【練習アドバイス】八方塞がりです！どの空きマスに置いても自分が4個並んでしまいます。"
+    },
+    en: {
+        devName: "Mr.Gerald", title: "Make 5",
+        p1First: "You go first", aiFirst: "CPU goes first", cpuLevelLabel: "CPU:",
+        lv0: "Practice", lv1: "Beginner", lv2: "Normal", lv3: "Strong", lv4: "Master",
+        startBtnIdle: "Start Game", startBtnPlaying: "Reset",
+        confirmReset: "Game is in progress. Do you want to reset?",
+        undoBtn: "Undo<br>({n} left)", undoBtnInf: "Undo<br>(Unlimited)", undoBtnUsed: "Undo<br>(Used)",
+        statusInit: "Select turn order & CPU level, then press 'Start Game'.",
+        statusP1: "Your turn ({mark})! Place a piece or tap opponent's 4-in-a-row to win.", statusAI: "AI is thinking...",
+        mTitle: "Rules & Strategies",
+        mText1: "[Basic Rules]<br>The outcome is determined by the number of pieces aligned vertically, horizontally, or diagonally.<br>Decide who goes first, take turns, and achieve either 1 or 2 on your turn to win.<br><br>1. Point out a spot where the opponent has exactly 4 pieces in a row.<br>2. Place your piece to make exactly 5 in a row.<br><br><span style='color: #e74c3c; font-weight: bold;'>Warning: If you make 4 in a row yourself, your opponent can point it out and you will lose.</span>",
+        copyright: "This game is free for personal use, sharing, and linking. However, for commercial use, you must obtain permission from the developer.<br>Developer: {dev} Ver.2026NOV(Since 2026APR)",
+        advBtn: "Advanced Strategy", closeBtn: "Close", nextBtn: "Next →", backBtn: "← Back",
+        mP1Title: "4-in-a-Row Patterns",
+        mP1Top: "There are generally two patterns to form a 4-in-a-row.",
+        mP1Bot: "If your opponent forms exactly 4-in-a-row, tap or click any of those 4 pieces to point it out and claim your victory.",
+        mP1Note: "Note: If a 4-in-a-row is formed on the last (36th) square, the turn does not pass, meaning no one can point it out, resulting in a draw.",
+        mP2Title: "5-in-a-Row Patterns",
+        mP2Top: "There are generally two patterns to form a 5-in-a-row.",
+        mP2Bot: "When a 5-in-a-row is formed, the player who placed the 5th piece automatically wins.",
+        mP2Note: "Note: Having 2, 3, or 6 pieces in a row does not affect the game's progression.",
+        mP3Title: "Strategy 1: The 4-Trap",
+        mP3Desc: "Normally, your opponent won't make a 4-in-a-row to avoid losing. Also, you must block the opponent from making a 5-in-a-row.<br>Strategy: Force the opponent to place a block that results in their own 4-in-a-row!",
+        mP3Sub: "(Diagram: If X blocks, X forms a vertical 4-in-a-row and loses)",
+        mP4Title: "Strategy 2: Late Game Squeeze",
+        mP4Desc: "You can chain multiple traps to restrict the opponent's moves.<br>However, as the board fills up in the late game, you must be extremely careful to avoid forcing yourself into placing a 4-in-a-row.",
+        msgWinPoint: "Brilliant! You pointed out the 4-in-a-row. You Win!",
+        msgWin5: "You aligned 5! You Win!", msgDraw: "Board is full. Draw!",
+        msgAIWinPoint: "AI pointed out your 4-in-a-row! CPU Wins!",
+        msgAIWin5: "CPU aligned 5! AI Wins!", msgNot4: "That is not 4-in-a-row!",
+        msgFatalCount: "All moves make 4! Forced in {sec}s",
+        coachWin5: "[Coach] You have a winning move right now! -> Press 'Undo'",
+        coachPoint4: "[Coach] Tap opponent's 4-in-a-row to win right now! -> Press 'Undo'",
+        coachMustBlock: "[Coach] If you don't block, the opponent wins next turn! -> Press 'Undo'",
+        coachSelf4: "[Coach] Placing here makes 4 in a row and you will lose! -> Press 'Undo'",
+        coachGiveWin: "[Coach] If you place here, the opponent wins next turn! -> Press 'Undo'",
+        coachStalemate: "[Coach] Checkmated! Every remaining square forces you into a 4-in-a-row."
+    },
+    zh: {
+        devName: "田之信", title: "五子棋",
+        p1First: "您先手", aiFirst: "电脑先手", cpuLevelLabel: "电脑强度:",
+        lv0: "练习", lv1: "初级", lv2: "普通", lv3: "困难", lv4: "大师",
+        startBtnIdle: "开始游戏", startBtnPlaying: "重置",
+        confirmReset: "比赛正在进行中，确定要重置吗？",
+        undoBtn: "悔棋<br>(剩{n}次)", undoBtnInf: "悔棋<br>(练习无限)", undoBtnUsed: "悔棋<br>(已用完)",
+        statusInit: "请选择先后手和电脑强度，然后点击“开始游戏”",
+        statusP1: "轮到您({mark})了！请落子或点击对手的4连位置指出。", statusAI: "AI 思考中...",
+        mTitle: "规则与策略",
+        mText1: "【基础规则】<br>胜负由垂直、水平或对角线上连成一线的棋子数量决定。<br>决定先后手后交替进行，在自己的回合达成①或②即可获胜。<br><br>① 指出对手刚好连成4子的位置。<br>② 放置自己的棋子刚好连成5子。<br><br><span style='color: #e74c3c; font-weight: bold;'>注意：如果您自己连成了4子，被对手指出后将会落败，请务必小心。</span>",
+        copyright: "本游戏可免费用于个人游玩与分享。但若用于商业目的，请务必取得开发者授权。<br>开发者：{dev} 版本：2026NOV(Since 2026APR)",
+        advBtn: "进阶策略", closeBtn: "关闭", nextBtn: "下一页 →", backBtn: "← 返回",
+        mP1Title: "连成4子的模式",
+        mP1Top: "连成4子大致有以下两种模式。",
+        mP1Bot: "当对手连成刚好4子时，点击这4枚棋子中的任意一枚即视为指出，您将直接获胜。",
+        mP1Note: "备注：如果在最后一个空格（第36格）连成4子，由于不会再有下一回合（无人可以指出），将判定为平局。",
+        mP2Title: "连成5子的模式",
+        mP2Top: "连成5子大致有以下两种模式。",
+        mP2Bot: "当连成刚好5子时，放置第5枚棋子的玩家将自动获胜。",
+        mP2Note: "备注：连成2个、3个或6个棋子的状态不会对游戏进程产生影响。",
+        mP3Title: "策略 1：逼四陷阱",
+        mP3Desc: "通常对手不会主动连成4子以免落败。同时，必须阻止对手连成5子。<br>因此，核心策略是：通过制造5子威胁，逼迫对手在进行防守时，被迫连成4子而自爆！",
+        mP3Sub: "（图：若 X 进行防守，将形成垂直4连而落败）",
+        mP4Title: "策略 2：残局生存",
+        mP4Desc: "有时需要连续设下陷阱来限制对手。<br>但是，随着棋盘逐渐填满，到了游戏后期，您必须极为小心，确保自己在落子时不会被迫连成4子。",
+        msgWinPoint: "漂亮！您指出了4连！您赢了！",
+        msgWin5: "您连成5子！您赢了！", msgDraw: "平局！",
+        msgAIWinPoint: "AI指出了您的4连！电脑获胜！",
+        msgAIWin5: "电脑连成5子！AI获胜！", msgNot4: "这里没有连成4子！",
+        msgFatalCount: "所有位置都会连成4！剩余 {sec} 秒",
+        coachWin5: "【练习提示】下在其他位置您现在就能获胜！ -> 请按“悔棋”",
+        coachPoint4: "【练习提示】现在指出对手的4连就能获胜！ -> 请按“悔棋”",
+        coachMustBlock: "【练习提示】现在不堵住这里，下一回合对手就赢了！ -> 请按“悔棋”",
+        coachSelf4: "【练习提示】下在这里您自己会连成4子，下一回合对手就赢了！ -> 请按“悔棋”",
+        coachGiveWin: "【练习提示】下在这里下一回合对手就赢了！ -> 请按“悔棋”",
+        coachStalemate: "【练习提示】无路可走了！无论下在哪里您都会连成4子。"
+    }
+};
+
+// ==========================================
+// 2. 時計機能 (リアルタイム更新)
 // ==========================================
 function updateClock() {
     const now = new Date();
-    const days = {
-        ja: ['日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜'],
-        en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-        zh: ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
-    };
-    const dayStr = days[currentLang][now.getDay()];
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
+    const h = now.getHours().toString().padStart(2, '0');
+    const m = now.getMinutes().toString().padStart(2, '0');
+    const dayIdx = now.getDay();
+    
+    let dayStr = "";
+    if (currentLang === 'ja') {
+        const daysJa = ['日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜'];
+        dayStr = daysJa[dayIdx];
+    } else if (currentLang === 'en') {
+        const daysEn = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        dayStr = daysEn[dayIdx];
+    } else if (currentLang === 'zh') {
+        const daysZh = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        dayStr = daysZh[dayIdx];
+    }
     
     const clockEl = document.getElementById('ui-clock');
-    if (clockEl) {
-        clockEl.innerText = `${dayStr} ${h}:${m}`;
-    }
+    if (clockEl) clockEl.innerText = `${dayStr} ${h}:${m}`;
 }
-setInterval(updateClock, 1000); // 1秒ごとに更新
+setInterval(updateClock, 1000);
+updateClock();
 
 // ==========================================
-// 2. 言語表示連動アニメーション (Page 1)
+// 3. 言語表示連動アニメーション (Page 1)
 // ==========================================
 const langPreviewData = {
     ja: { title: "五個並べ", sub: "言語を選択して下さい" },
@@ -350,10 +518,9 @@ function updateLangPreview(lang) {
     
     langKeys.forEach(k => {
         const btn = document.getElementById(`btn-lang-${k}`);
-        if(k === lang) {
-            btn.classList.add('active-lang');
-        } else {
-            btn.classList.remove('active-lang');
+        if (btn) {
+            if(k === lang) btn.classList.add('active-lang');
+            else btn.classList.remove('active-lang');
         }
     });
 }
@@ -370,7 +537,7 @@ function pauseCycle(lang) { if(cycleTimer) clearInterval(cycleTimer); updateLang
 function resumeCycle() { startCycle(); }
 
 // ==========================================
-// 3. 共通ロジック
+// 4. 共通ロジック
 // ==========================================
 function getExactLine(boardArr, r, c, dr, dc, color, targetLength) {
     let cells = [{r, c}];
@@ -431,7 +598,7 @@ function simulateRandom(tempBoard, nextTurnColor, aiColorRef, playerColorRef) {
     return null;
 }
 
-function drawPiece(context, type, r, c, size, weight) {
+function drawStone(context, type, r, c, size, weight) {
     const cx = c * size + size / 2, cy = r * size + size / 2;
     context.beginPath(); context.lineWidth = weight;
     if (type === 'O') {
@@ -444,175 +611,6 @@ function drawPiece(context, type, r, c, size, weight) {
         context.strokeStyle = '#3498db';
     }
     context.stroke();
-}
-
-
-// ==========================================
-// 4. 多言語辞書とUI設定
-// ==========================================
-const i18n = {
-    ja: {
-        devName: "に〜はお田中", title: "五個並べ",
-        p1First: "あなたが先手", aiFirst: "CPUが先手", cpuLevelLabel: "CPUの強さ：",
-        lv1: "初心者", lv2: "普通", lv3: "強い", lv4: "最強",
-        startBtn: "ゲーム開始<br>／リセット", statusInit: "ゲームを開始してください",
-        statusP1: "あなた({mark})の番です。駒を置くか、相手の4並びの箇所をタップで指摘して下さい。", statusAI: "AIが思考中...",
-        mTitle: "基本の遊び方と戦略",
-        mText1: "【基本ルール】<br>駒が縦、横または斜めの直線で並んだ数で勝敗が決まります。<br>先攻、後攻を決めて開始し、交互の番に①②のいずれかを果たすと勝ちとなります。<br><br>①相手の駒が４個並んでいる箇所を指摘する。<br>②自分の駒を置いて５個並べる。<br><br><span style='color: #e74c3c; font-weight: bold;'>注意：自分が4個並べると相手に指摘されて負けるため、注意が必要です。</span>",
-        copyright: "本ゲームは個人での利用・紹介・URLの共有を自由に行なっていただけます。ただし、商用目的で利用（掲載・転載等）される場合は、必ず開発者の許可を得るようお願いいたします。<br>開発者：{dev}　Ver.2026APR",
-        advBtn: "更に詳細解説", closeBtn: "閉じる", nextBtn: "次へ →", backBtn: "← 戻る",
-        mP1Title: "駒が4個並ぶパターン",
-        mP1Top: "４つの駒が並ぶには大まかに次の２つのパターンとなります。",
-        mP1Bot: "相手の駒が４つ並んだ際は、当該４つの駒のいずれかをタップまたはクリックすることで指摘したことになり、あなたの勝ちとなります。",
-        mP1Note: "備考：最後のマス(36マス目)で４つ並んだ場合はつぎの番には回らない為＝指摘する者がいない為、引き分けとなります。",
-        mP2Title: "駒が5個並ぶパターン",
-        mP2Top: "５つの駒が並ぶには大まかに次の２つのパターンとなります。",
-        mP2Bot: "５つの駒が並んだ際は、自動的に５つの駒を並べた者が勝ちとなります。",
-        mP2Note: "備考：駒が並ぶ数が２個、３個、６個の状態ではゲーム進行上に影響はありません。",
-        mP3Title: "戦略1：四個の強制（トラップ）",
-        mP3Desc: "自身の駒が４つ並ぶと負けてしまう為、通常では相手は４つ並べようとは考えません。また相手の駒が５つ並ぶと自身が負けてしまうので、こちらが５つ並べようとすると相手は阻止する為に駒を挟んできます。<br>そこで敢えてこちらの駒が５つ並べるの阻止する為に相手が駒を置くと相手の駒が４つ並ぶように誘導します。",
-        mP3Sub: "（図：×がブロックすると、縦に4つ並んで自滅する）",
-        mP4Title: "戦略2：終盤の自滅回避",
-        mP4Desc: "時には複数回連続で５つ並ばさないように相手の駒を間に置かせるような戦略を行ないます。<br>ただし後半になって空いているマスが少なくなってくると今度は如何に自分の駒が４個並ばないように置いていくかを配慮していかなければなりません。",
-        msgWinPoint: "見事！相手の4並びを指摘しました！ あなたの勝利！",
-        msgWin5: "5つ並べました！ あなたの勝利！", msgDraw: "マスが埋まりました。引き分けです！",
-        msgAIWinPoint: "AIがあなたの4並びを指摘！ コンピューターの勝利！",
-        msgAIWin5: "コンピューターが5つ並べました！ AIの勝利！", msgNot4: "そこは4つ並んでいません！",
-        msgFatalCount: "全て4個並んでしまいます！ あと {sec} 秒" 
-    },
-    en: {
-        devName: "Gerald.T", title: "Make 5",
-        p1First: "You go first", aiFirst: "CPU goes first", cpuLevelLabel: "CPU:",
-        lv1: "Beginner", lv2: "Normal", lv3: "Strong", lv4: "Master",
-        startBtn: "Start<br>/ Reset", statusInit: "Please start the game.",
-        statusP1: "Your turn ({mark})! Place a piece or tap opponent's 4-in-a-row to win.", statusAI: "AI is thinking...",
-        mTitle: "Rules & Strategies",
-        mText1: "[Basic Rules]<br>The outcome is determined by the number of pieces aligned vertically, horizontally, or diagonally.<br>Decide who goes first, and on your turn, achieve either 1 or 2 to win.<br><br>1. Point out a spot where the opponent has exactly 4 pieces in a row.<br>2. Place your piece to make exactly 5 in a row.<br><br><span style='color: #e74c3c; font-weight: bold;'>Warning: If you make 4 in a row yourself, your opponent can point it out and you will lose.</span>",
-        copyright: "This game is free for personal use, sharing, and linking. However, for commercial use, you must obtain permission from the developer.<br>Developer: {dev} Ver.2026APR",
-        advBtn: "Advanced Strategy", closeBtn: "Close", nextBtn: "Next →", backBtn: "← Back",
-        mP1Title: "4-in-a-Row Patterns",
-        mP1Top: "There are generally two patterns to form a 4-in-a-row.",
-        mP1Bot: "If your opponent forms exactly 4-in-a-row, tap or click any of those 4 pieces to point it out and claim your victory.",
-        mP1Note: "Note: If a 4-in-a-row is formed on the last (36th) square, the turn does not pass, meaning no one can point it out, resulting in a draw.",
-        mP2Title: "5-in-a-Row Patterns",
-        mP2Top: "There are generally two patterns to form a 5-in-a-row.",
-        mP2Bot: "When a 5-in-a-row is formed, the player who placed the 5th piece automatically wins.",
-        mP2Note: "Note: Having 2, 3, or 6 pieces in a row does not affect the game's progression.",
-        mP3Title: "Strategy 1: The 4-Trap",
-        mP3Desc: "Normally, a player won't make a 4-in-a-row to avoid losing. Also, you must block the opponent from making a 5-in-a-row.<br>Strategy: Force the opponent to place a block that results in their own 4-in-a-row!",
-        mP3Sub: "(Diagram: If X blocks, X forms a vertical 4-in-a-row and loses)",
-        mP4Title: "Strategy 2: Late Game Squeeze",
-        mP4Desc: "You can chain multiple traps to restrict the opponent's moves.<br>However, as the board fills up in the late game, you must be extremely careful to avoid forcing yourself into placing a 4-in-a-row.",
-        msgWinPoint: "Brilliant! You pointed out the 4-in-a-row. You Win!",
-        msgWin5: "You aligned 5! You Win!", msgDraw: "Board is full. Draw!",
-        msgAIWinPoint: "AI pointed out your 4-in-a-row! CPU Wins!",
-        msgAIWin5: "CPU aligned 5! AI Wins!", msgNot4: "That is not 4-in-a-row!",
-        msgFatalCount: "All moves make 4! Forced in {sec}s" 
-    },
-    zh: {
-        devName: "田之信", title: "五子棋",
-        p1First: "您先手", aiFirst: "电脑先手", cpuLevelLabel: "电脑强度:",
-        lv1: "初级", lv2: "普通", lv3: "困难", lv4: "大师",
-        startBtn: "开始<br>/ 重置", statusInit: "请开始游戏",
-        statusP1: "轮到您({mark})了！请落子或点击对手的4连位置指出。", statusAI: "AI 思考中...",
-        mTitle: "规则与策略",
-        mText1: "【基础规则】<br>胜负由垂直、水平或对角线上连成一线的棋子数量决定。<br>决定先后手后开始游戏，在轮到您时达成①或②即可获胜。<br><br>① 指出对手刚好连成4子的位置。<br>② 放置自己的棋子刚好连成5子。<br><br><span style='color: #e74c3c; font-weight: bold;'>注意：如果您自己连成了4子，被对手指出后将会落败，请务必小心。</span>",
-        copyright: "本游戏可免费用于个人游玩与分享。但若用于商业目的，请务必取得开发者授权。<br>开发者：{dev} 版本：2026APR",
-        advBtn: "进阶策略", closeBtn: "关闭", nextBtn: "下一页 →", backBtn: "← 返回",
-        mP1Title: "连成4子的模式",
-        mP1Top: "连成4子大致有以下两种模式。",
-        mP1Bot: "当对手连成刚好4子时，点击这4枚棋子中的任意一枚即视为指出，您将直接获胜。",
-        mP1Note: "备注：如果在最后一个空格（第36格）连成4子，由于不会再有下一回合（无人可以指出），将判定为平局。",
-        mP2Title: "连成5子的模式",
-        mP2Top: "连成5子大致有以下两种模式。",
-        mP2Bot: "当连成刚好5子时，放置第5枚棋子的玩家将自动获胜。",
-        mP2Note: "备注：连成2个、3个或6个棋子的状态不会对游戏进程产生影响。",
-        mP3Title: "策略 1：逼四陷阱",
-        mP3Desc: "通常玩家不会主动连成4子以免落败。同时，必须阻止对手连成5子。<br>因此，核心策略是：通过制造5子威胁，逼迫对手在进行防守时，被迫连成4子而自爆！",
-        mP3Sub: "（图：若 X 进行防守，将形成垂直4连而落败）",
-        mP4Title: "策略 2：残局生存",
-        mP4Desc: "有时需要连续设下陷阱来限制对手。<br>但是，随着棋盘逐渐填满，到了游戏后期，您必须极为小心，确保自己在落子时不会被迫连成4子。",
-        msgWinPoint: "漂亮！您指出了4连！您赢了！",
-        msgWin5: "您连成5子！您赢了！", msgDraw: "平局！",
-        msgAIWinPoint: "AI指出了您的4连！电脑获胜！",
-        msgAIWin5: "电脑连成5子！AI获胜！", msgNot4: "这里没有连成4子！",
-        msgFatalCount: "所有位置都会连成4！剩余 {sec} 秒" 
-    }
-};
-
-let currentLang = 'ja';
-
-function selectLanguage(lang) {
-    if(cycleTimer) clearInterval(cycleTimer); 
-    currentLang = lang;
-    const t = i18n[lang];
-
-    document.getElementById('ui-title').innerText = t.title;
-    document.getElementById('ui-p1-first').innerText = t.p1First;
-    document.getElementById('ui-ai-first').innerText = t.aiFirst;
-    document.getElementById('ui-cpu-level-label').innerText = t.cpuLevelLabel;
-    document.getElementById('ui-lv1').innerText = t.lv1;
-    document.getElementById('ui-lv2').innerText = t.lv2;
-    document.getElementById('ui-lv3').innerText = t.lv3;
-    document.getElementById('ui-lv4').innerText = t.lv4;
-    document.getElementById('ui-start-btn').innerHTML = t.startBtn;
-    document.getElementById('status').innerText = t.statusInit;
-    
-    document.getElementById('ui-m-title').innerText = t.mTitle;
-    document.getElementById('ui-m-text1').innerHTML = t.mText1;
-    document.getElementById('ui-copyright').innerHTML = t.copyright.replace('{dev}', t.devName);
-    document.getElementById('ui-btn-adv').innerText = t.advBtn;
-    document.getElementById('ui-btn-close0').innerText = t.closeBtn;
-    
-    document.getElementById('ui-m-p1-title').innerText = t.mP1Title;
-    document.getElementById('ui-m-p1-top').innerText = t.mP1Top;
-    document.getElementById('ui-m-p1-bot').innerText = t.mP1Bot;
-    document.getElementById('ui-m-p1-note').innerText = t.mP1Note;
-
-    document.getElementById('ui-m-p2-title').innerText = t.mP2Title;
-    document.getElementById('ui-m-p2-top').innerText = t.mP2Top;
-    document.getElementById('ui-m-p2-bot').innerText = t.mP2Bot;
-    document.getElementById('ui-m-p2-note').innerText = t.mP2Note;
-
-    document.getElementById('ui-m-p3-title').innerText = t.mP3Title;
-    document.getElementById('ui-m-p3-desc').innerHTML = t.mP3Desc;
-    document.getElementById('ui-m-p3-sub').innerText = t.mP3Sub;
-
-    document.getElementById('ui-m-p4-title').innerText = t.mP4Title;
-    document.getElementById('ui-m-p4-desc').innerHTML = t.mP4Desc;
-
-    document.getElementById('ui-btn-close4').innerText = t.closeBtn;
-    document.getElementById('ui-btn-next1').innerText = t.nextBtn;
-    document.getElementById('ui-btn-next2').innerText = t.nextBtn;
-    document.getElementById('ui-btn-next3').innerText = t.nextBtn;
-    document.getElementById('ui-btn-back1').innerText = t.backBtn;
-    document.getElementById('ui-btn-back2').innerText = t.backBtn;
-    document.getElementById('ui-btn-back3').innerText = t.backBtn;
-    document.getElementById('ui-btn-back4').innerText = t.backBtn;
-
-    updateClock(); // 言語切り替え時に時計も即時更新
-    stopDemo();
-    document.getElementById('lang-screen').style.display = 'none';
-    document.getElementById('game-screen').style.display = 'flex';
-    drawBoard();
-}
-
-function openHelpModal() { changeHelpPage(0); document.getElementById('help-modal').style.display = 'flex'; }
-function closeHelpModal() { document.getElementById('help-modal').style.display = 'none'; }
-function changeHelpPage(pageNum) {
-    for(let i=0; i<=4; i++) {
-        const el = document.getElementById(`help-page-${i}`);
-        if(el) el.style.display = (pageNum === i) ? 'block' : 'none';
-    }
-}
-function setControlsEnabled(enabled) {
-    const radios = document.querySelectorAll('input[name="firstPlayer"], input[name="cpuLevel"]');
-    radios.forEach(radio => { radio.disabled = !enabled; });
-    const levelLabels = document.querySelectorAll('.level-group label');
-    levelLabels.forEach(label => {
-        if(enabled) label.classList.remove('disabled');
-        else label.classList.add('disabled');
-    });
 }
 
 // ==========================================
@@ -630,7 +628,6 @@ function startDemo() {
     demoTurn = 'O'; 
     demoWinningCells = []; demoBlinkVisible = true;
     
-    // 初心者(1)を除外した 2,3,4 からランダムにレベルを選択し対戦させる
     const demoLevels = [2, 3, 4];
     demoLvlO = demoLevels[Math.floor(Math.random() * demoLevels.length)];
     demoLvlX = demoLevels[Math.floor(Math.random() * demoLevels.length)];
@@ -665,7 +662,6 @@ function playDemoMove() {
     }
 
     let bestMoves = []; let bestScore = -Infinity;
-    
     let blunder4 = Math.random() < 0.05;
     let missBlock5 = Math.random() < 0.05;
 
@@ -753,37 +749,237 @@ function drawDemoBoard(lastR = -1, lastC = -1) {
         for (let c = 0; c < GRID_SIZE; c++) {
             const isWin = demoWinningCells.some(cell => cell.r === r && cell.c === c);
             if (isWin && !demoBlinkVisible) continue; 
-            if(demoBoard[r][c]) drawPiece(demoCtx, demoBoard[r][c], r, c, DEMO_CELL, 3);
+            if(demoBoard[r][c]) drawStone(demoCtx, demoBoard[r][c], r, c, DEMO_CELL, 3);
         }
     }
 }
-startCycle(); 
-startDemo();
 
 // ==========================================
-// 6. メインゲーム
+// 6. メインゲーム & 練習モード & 待った機能
 // ==========================================
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const statusDisplay = document.getElementById('status');
+const coachBanner = document.getElementById('coach-banner');
 const CELL_SIZE = canvas.width / GRID_SIZE;
 
 let board = []; let currentPlayer = 'O'; let playerColor = 'O'; let aiColor = 'X';       
 let gameOver = true; let aiLevel = 2; 
 
-let lastMove = null; let winningCells = []; let blinkVisible = true; let blinkInterval = null;
+let lastMove = null; // 最後に確定着手されたマス（黄色背景ハイライト用）
+let winningCells = []; let blinkVisible = true; let blinkInterval = null;
 let fatalCountdownTimer = null; let fatalTimeLeft = 30;
+
+let moveHistory = []; 
+let undoCountLeft = 1;
+let isCoachWarningActive = false;
+let coachWarnCell = null; // 練習モード警告時にプレイヤーが置いた点滅対象の駒マス
+let coachBlinkInterval = null;
+let coachBlinkVisible = true;
+
+function updateStartButtonUI() {
+    const btn = document.getElementById('ui-start-btn');
+    const t = i18n[currentLang];
+    if (!btn) return;
+    if (gameOver) {
+        btn.innerText = t.startBtnIdle;
+        btn.classList.remove('playing');
+    } else {
+        btn.innerText = t.startBtnPlaying;
+        btn.classList.add('playing');
+    }
+}
+
+function handleStartResetClick() {
+    if (!gameOver) {
+        const isConfirmed = confirm(i18n[currentLang].confirmReset);
+        if (isConfirmed) {
+            resetToIdleState();
+        }
+    } else {
+        startGame();
+    }
+}
+
+function resetToIdleState() {
+    gameOver = true;
+    board = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(null));
+    lastMove = null;
+    winningCells = [];
+    blinkVisible = true;
+    moveHistory = [];
+    clearCoachWarning();
+    
+    if (blinkInterval) { clearInterval(blinkInterval); blinkInterval = null; }
+    if (fatalCountdownTimer) { clearInterval(fatalCountdownTimer); fatalCountdownTimer = null; }
+    
+    setControlsEnabled(true);
+    updateStartButtonUI();
+    updateUndoButtonUI();
+    
+    statusDisplay.innerText = i18n[currentLang].statusInit;
+    statusDisplay.style.color = "#2c3e50";
+    drawBoard();
+}
+
+function clearCoachWarning() {
+    isCoachWarningActive = false;
+    coachWarnCell = null;
+    if (coachBanner) coachBanner.style.display = 'none';
+    if (coachBlinkInterval) {
+        clearInterval(coachBlinkInterval);
+        coachBlinkInterval = null;
+    }
+    coachBlinkVisible = true;
+    const undoBtn = document.getElementById('ui-undo-btn');
+    if (undoBtn) undoBtn.classList.remove('highlight-undo');
+}
+
+function triggerCoachWarning(msgKey, warnR, warnC) {
+    isCoachWarningActive = true;
+    coachWarnCell = { r: warnR, c: warnC };
+    coachBanner.innerText = i18n[currentLang][msgKey];
+    coachBanner.style.display = 'block';
+    coachBanner.style.animation = 'none';
+    coachBanner.offsetHeight; 
+    coachBanner.style.animation = null;
+    
+    document.getElementById('ui-undo-btn').classList.add('highlight-undo');
+    updateUndoButtonUI();
+
+    if (coachBlinkInterval) clearInterval(coachBlinkInterval);
+    coachBlinkVisible = true;
+    coachBlinkInterval = setInterval(() => {
+        coachBlinkVisible = !coachBlinkVisible;
+        drawBoard();
+    }, 350);
+    drawBoard();
+}
+
+function updateUndoButtonUI() {
+    const btn = document.getElementById('ui-undo-btn');
+    const t = i18n[currentLang];
+    if (!btn) return;
+    if (gameOver) {
+        btn.disabled = true;
+        const checkedRadio = document.querySelector('input[name="cpuLevel"]:checked');
+        const selectedLvl = checkedRadio ? parseInt(checkedRadio.value) : 2;
+        btn.innerHTML = (selectedLvl === 0) ? t.undoBtnInf : t.undoBtn.replace('{n}', 1);
+        return;
+    }
+    
+    if (isCoachWarningActive) {
+        btn.disabled = false;
+        btn.innerHTML = t.undoBtnInf;
+        return;
+    }
+
+    const canUndo = (currentPlayer === playerColor) && (moveHistory.length > 0) && (aiLevel === 0 || undoCountLeft > 0);
+    btn.disabled = !canUndo;
+
+    if (aiLevel === 0) {
+        btn.innerHTML = t.undoBtnInf;
+    } else if (undoCountLeft > 0) {
+        btn.innerHTML = t.undoBtn.replace('{n}', undoCountLeft);
+    } else {
+        btn.innerHTML = t.undoBtnUsed;
+    }
+}
+
+function selectLanguage(lang) {
+    if(cycleTimer) clearInterval(cycleTimer); 
+    currentLang = lang;
+    const t = i18n[lang];
+
+    document.getElementById('ui-title').innerText = t.title;
+    document.getElementById('ui-p1-first').innerText = t.p1First;
+    document.getElementById('ui-ai-first').innerText = t.aiFirst;
+    document.getElementById('ui-cpu-level-label').innerText = t.cpuLevelLabel;
+    document.getElementById('ui-lv0').innerText = t.lv0;
+    document.getElementById('ui-lv1').innerText = t.lv1;
+    document.getElementById('ui-lv2').innerText = t.lv2;
+    document.getElementById('ui-lv3').innerText = t.lv3;
+    document.getElementById('ui-lv4').innerText = t.lv4;
+    
+    updateStartButtonUI();
+    document.getElementById('status').innerText = t.statusInit;
+    
+    document.getElementById('ui-m-title').innerText = t.mTitle;
+    document.getElementById('ui-m-text1').innerHTML = t.mText1;
+    document.getElementById('ui-copyright').innerHTML = t.copyright.replace('{dev}', t.devName);
+    document.getElementById('ui-btn-adv').innerText = t.advBtn;
+    document.getElementById('ui-btn-close0').innerText = t.closeBtn;
+    
+    document.getElementById('ui-m-p1-title').innerText = t.mP1Title;
+    document.getElementById('ui-m-p1-top').innerText = t.mP1Top;
+    document.getElementById('ui-m-p1-bot').innerText = t.mP1Bot;
+    document.getElementById('ui-m-p1-note').innerText = t.mP1Note;
+
+    document.getElementById('ui-m-p2-title').innerText = t.mP2Title;
+    document.getElementById('ui-m-p2-top').innerText = t.mP2Top;
+    document.getElementById('ui-m-p2-bot').innerText = t.mP2Bot;
+    document.getElementById('ui-m-p2-note').innerText = t.mP2Note;
+
+    document.getElementById('ui-m-p3-title').innerText = t.mP3Title;
+    document.getElementById('ui-m-p3-desc').innerHTML = t.mP3Desc;
+    document.getElementById('ui-m-p3-sub').innerText = t.mP3Sub;
+
+    document.getElementById('ui-m-p4-title').innerText = t.mP4Title;
+    document.getElementById('ui-m-p4-desc').innerHTML = t.mP4Desc;
+
+    document.getElementById('ui-btn-close4').innerText = t.closeBtn;
+    document.getElementById('ui-btn-next1').innerText = t.nextBtn;
+    document.getElementById('ui-btn-next2').innerText = t.nextBtn;
+    document.getElementById('ui-btn-next3').innerText = t.nextBtn;
+    document.getElementById('ui-btn-back1').innerText = t.backBtn;
+    document.getElementById('ui-btn-back2').innerText = t.backBtn;
+    document.getElementById('ui-btn-back3').innerText = t.backBtn;
+    document.getElementById('ui-btn-back4').innerText = t.backBtn;
+
+    updateUndoButtonUI();
+    updateClock();
+
+    stopDemo();
+    document.getElementById('lang-screen').style.display = 'none';
+    document.getElementById('game-screen').style.display = 'flex';
+    drawBoard();
+}
+
+function openHelpModal() { changeHelpPage(0); document.getElementById('help-modal').style.display = 'flex'; }
+function closeHelpModal() { document.getElementById('help-modal').style.display = 'none'; }
+function changeHelpPage(pageNum) {
+    for(let i=0; i<=4; i++) {
+        const el = document.getElementById(`help-page-${i}`);
+        if(el) el.style.display = (pageNum === i) ? 'block' : 'none';
+    }
+}
+function setControlsEnabled(enabled) {
+    const radios = document.querySelectorAll('input[name="firstPlayer"], input[name="cpuLevel"]');
+    radios.forEach(radio => { radio.disabled = !enabled; });
+    const levelLabels = document.querySelectorAll('.level-group label');
+    levelLabels.forEach(label => {
+        if(enabled) label.classList.remove('disabled');
+        else label.classList.add('disabled');
+    });
+}
 
 function startGame() {
     board = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(null));
     gameOver = false;
     lastMove = null; winningCells = []; blinkVisible = true;
-    if (blinkInterval) clearInterval(blinkInterval);
+    moveHistory = [];
+    clearCoachWarning();
+    
+    if (blinkInterval) { clearInterval(blinkInterval); blinkInterval = null; }
     if (fatalCountdownTimer) { clearInterval(fatalCountdownTimer); fatalCountdownTimer = null; }
     
     const isPlayerFirst = document.querySelector('input[name="firstPlayer"]:checked').value === 'player';
     aiLevel = parseInt(document.querySelector('input[name="cpuLevel"]:checked').value);
+    undoCountLeft = (aiLevel === 0) ? 999 : 1;
+    
     setControlsEnabled(false); 
+    updateStartButtonUI();
+    updateUndoButtonUI();
 
     playerColor = isPlayerFirst ? 'O' : 'X';
     aiColor = isPlayerFirst ? 'X' : 'O';
@@ -794,6 +990,28 @@ function startGame() {
 
     if (aiColor === 'O') setTimeout(makeAIMove, 100);
     else checkAndStartFatalCountdown();
+}
+
+function undoMove() {
+    if (gameOver || moveHistory.length === 0) return;
+    if (!isCoachWarningActive && (currentPlayer !== playerColor || (aiLevel !== 0 && undoCountLeft <= 0))) return;
+
+    if (fatalCountdownTimer) { clearInterval(fatalCountdownTimer); fatalCountdownTimer = null; }
+    clearCoachWarning();
+
+    const prevState = moveHistory.pop();
+    board = prevState.board.map(row => [...row]);
+    lastMove = prevState.lastMove ? { ...prevState.lastMove } : null;
+    currentPlayer = playerColor;
+
+    if (aiLevel !== 0) {
+        undoCountLeft--;
+    }
+
+    updateUndoButtonUI();
+    updateStatus();
+    drawBoard();
+    checkAndStartFatalCountdown();
 }
 
 function updateStatus() {
@@ -813,7 +1031,7 @@ function updateStatus() {
 }
 
 function checkAndStartFatalCountdown() {
-    if (gameOver || currentPlayer !== playerColor) return;
+    if (gameOver || currentPlayer !== playerColor || isCoachWarningActive) return;
     
     let allFatal = true;
     let emptyCells = [];
@@ -831,6 +1049,10 @@ function checkAndStartFatalCountdown() {
     }
     
     if (emptyCells.length > 1 && allFatal) {
+        if (aiLevel === 0) {
+            coachBanner.innerText = i18n[currentLang].coachStalemate;
+            coachBanner.style.display = 'block';
+        }
         fatalTimeLeft = 30;
         updateFatalStatus();
         fatalCountdownTimer = setInterval(() => {
@@ -839,7 +1061,7 @@ function checkAndStartFatalCountdown() {
                 clearInterval(fatalCountdownTimer);
                 fatalCountdownTimer = null;
                 let move = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-                processPlayerMove(move.r, move.c);
+                processPlayerMove(move.r, move.c, true);
             } else {
                 updateFatalStatus();
             }
@@ -854,10 +1076,13 @@ function updateFatalStatus() {
 
 function drawBoard() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // 黄色背景ハイライト（最後に確定着手されたマス。警告中は相手が最後に置いたマスのまま維持）
     if (lastMove) {
         ctx.fillStyle = 'rgba(241, 196, 15, 0.3)';
         ctx.fillRect(lastMove.c * CELL_SIZE, lastMove.r * CELL_SIZE, CELL_SIZE, CELL_SIZE);
     }
+
     ctx.strokeStyle = '#ccc'; ctx.lineWidth = 2;
     for (let i = 0; i <= GRID_SIZE; i++) {
         ctx.beginPath(); ctx.moveTo(i * CELL_SIZE, 0); ctx.lineTo(i * CELL_SIZE, canvas.height); ctx.stroke();
@@ -867,15 +1092,24 @@ function drawBoard() {
         for (let c = 0; c < GRID_SIZE; c++) {
             const isWin = winningCells.some(cell => cell.r === r && cell.c === c);
             if (isWin && !blinkVisible) continue;
-            if (board[r][c]) drawPiece(ctx, board[r][c], r, c, CELL_SIZE, 4);
+
+            // 練習モード警告（「待った」待ち）中は、プレイヤーが今置いた駒だけを点滅させる
+            if (isCoachWarningActive && coachWarnCell && coachWarnCell.r === r && coachWarnCell.c === c && !coachBlinkVisible) {
+                continue;
+            }
+
+            if (board[r][c]) drawStone(ctx, board[r][c], r, c, CELL_SIZE, 4);
         }
     }
 }
 
 function endGame(winnerName, messageKey, winCells = []) {
     gameOver = true;
+    clearCoachWarning();
     if (fatalCountdownTimer) { clearInterval(fatalCountdownTimer); fatalCountdownTimer = null; }
     setControlsEnabled(true); 
+    updateStartButtonUI();
+    updateUndoButtonUI();
     statusDisplay.innerText = i18n[currentLang][messageKey];
     statusDisplay.style.color = winnerName === 'player' ? '#27ae60' : '#c0392b';
     if (winCells.length > 0) {
@@ -884,8 +1118,81 @@ function endGame(winnerName, messageKey, winCells = []) {
     }
 }
 
+function checkBadMoveForPractice(targetR, targetC) {
+    for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+            if (board[r][c] === aiColor) {
+                if (checkExactLines(board, r, c, aiColor).has4) {
+                    return 'coachPoint4';
+                }
+            }
+        }
+    }
+
+    let empty = [];
+    for (let r = 0; r < GRID_SIZE; r++) {
+        for (let c = 0; c < GRID_SIZE; c++) {
+            if (board[r][c] === null) empty.push({r, c});
+        }
+    }
+
+    let nonSelf4Moves = empty.filter(m => {
+        board[m.r][m.c] = playerColor;
+        let is4 = checkExactLines(board, m.r, m.c, playerColor).has4;
+        board[m.r][m.c] = null;
+        return !is4;
+    });
+    if (nonSelf4Moves.length === 0) return null;
+
+    let win5Moves = empty.filter(m => {
+        board[m.r][m.c] = playerColor;
+        let is5 = checkExactLines(board, m.r, m.c, playerColor).has5;
+        board[m.r][m.c] = null;
+        return is5;
+    });
+    if (win5Moves.length > 0 && !win5Moves.some(m => m.r === targetR && m.c === targetC)) {
+        return 'coachWin5';
+    }
+
+    board[targetR][targetC] = playerColor;
+    let targetMakesSelf4 = checkExactLines(board, targetR, targetC, playerColor).has4;
+    board[targetR][targetC] = null;
+    if (targetMakesSelf4) {
+        return 'coachSelf4';
+    }
+
+    let oppWin5Moves = empty.filter(m => {
+        board[m.r][m.c] = aiColor;
+        let is5 = checkExactLines(board, m.r, m.c, aiColor).has5;
+        board[m.r][m.c] = null;
+        return is5;
+    });
+    if (oppWin5Moves.length > 0 && !oppWin5Moves.some(m => m.r === targetR && m.c === targetC)) {
+        return 'coachMustBlock';
+    }
+
+    board[targetR][targetC] = playerColor;
+    let givesOppWin = false;
+    for (let m of empty) {
+        if (m.r === targetR && m.c === targetC) continue;
+        board[m.r][m.c] = aiColor;
+        if (checkExactLines(board, m.r, m.c, aiColor).has5) {
+            givesOppWin = true;
+        }
+        board[m.r][m.c] = null;
+        if (givesOppWin) break;
+    }
+    board[targetR][targetC] = null;
+    if (givesOppWin) {
+        return 'coachGiveWin';
+    }
+
+    return null;
+}
+
 canvas.addEventListener('click', (e) => {
-    if (gameOver || currentPlayer !== playerColor) return;
+    if (gameOver || currentPlayer !== playerColor || isCoachWarningActive) return;
+
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
@@ -898,8 +1205,9 @@ canvas.addEventListener('click', (e) => {
 
     if (board[r][c] === aiColor) {
         const result = checkExactLines(board, r, c, aiColor);
-        if (result.has4) endGame('player', 'msgWinPoint', result.line4);
-        else {
+        if (result.has4) {
+            endGame('player', 'msgWinPoint', result.line4);
+        } else {
             let oldText = statusDisplay.innerText;
             statusDisplay.innerText = i18n[currentLang].msgNot4; statusDisplay.style.color = "red";
             setTimeout(() => { if(!gameOver) { statusDisplay.innerText = oldText; statusDisplay.style.color = "#c0392b"; } }, 1500);
@@ -908,18 +1216,38 @@ canvas.addEventListener('click', (e) => {
     }
 
     if (board[r][c] === null) {
-        processPlayerMove(r, c);
+        processPlayerMove(r, c, false);
     }
 });
 
-function processPlayerMove(r, c) {
+function processPlayerMove(r, c, isForcedTimeout = false) {
+    moveHistory.push({
+        board: board.map(row => [...row]),
+        lastMove: lastMove ? { ...lastMove } : null
+    });
+
     if (fatalCountdownTimer) { clearInterval(fatalCountdownTimer); fatalCountdownTimer = null; }
-    board[r][c] = playerColor; lastMove = {r, c};
+
+    // 練習モード(aiLevel === 0)の悪手判定
+    // lastMove（黄色い四角）は相手が最後に置いたマスのまま保持し、プレイヤーの駒だけを置いて点滅させる
+    if (aiLevel === 0 && !isForcedTimeout) {
+        const warningKey = checkBadMoveForPractice(r, c);
+        if (warningKey) {
+            board[r][c] = playerColor;
+            triggerCoachWarning(warningKey, r, c);
+            return;
+        }
+    }
+
+    board[r][c] = playerColor; 
+    lastMove = {r, c};
+    
     const result = checkExactLines(board, r, c, playerColor);
     if (result.has5) { drawBoard(); endGame('player', 'msgWin5', result.line5); return; }
     if (board.flat().every(cell => cell !== null)) { drawBoard(); endGame('draw', 'msgDraw'); return; }
     
     currentPlayer = aiColor;
+    updateUndoButtonUI();
     drawBoard(); updateStatus();
     setTimeout(makeAIMove, 50);
 }
@@ -927,7 +1255,7 @@ function processPlayerMove(r, c) {
 function makeAIMove() {
     if (gameOver) return;
 
-    let missChance = (aiLevel === 1) ? 0.2 : 0;
+    let missChance = (aiLevel <= 1) ? 0.2 : 0;
     if (Math.random() >= missChance) {
         for (let r = 0; r < GRID_SIZE; r++) {
             for (let c = 0; c < GRID_SIZE; c++) {
@@ -939,7 +1267,7 @@ function makeAIMove() {
         }
     }
 
-    const simCounts = {1: 5, 2: 20, 3: 80, 4: 200}; 
+    const simCounts = {0: 5, 1: 5, 2: 20, 3: 80, 4: 200}; 
     let simLimit = simCounts[aiLevel];
 
     let bestScore = -Infinity; let bestMoves = [];
@@ -962,7 +1290,6 @@ function makeAIMove() {
                 if (mustBlock) { executeAIMove(r, c); return; }
 
                 let winCount = 0;
-                
                 if (myMax > 5) winCount -= 50;
                 if (oppMax > 5) winCount -= 50;
 
@@ -1000,14 +1327,18 @@ function executeAIMove(r, c) {
     if (board.flat().every(cell => cell !== null)) { drawBoard(); endGame('draw', 'msgDraw'); return; }
 
     currentPlayer = playerColor;
+    updateUndoButtonUI();
     drawBoard(); updateStatus();
     checkAndStartFatalCountdown();
 }
 
+// ==========================================
+// 7. 初期起動処理
+// ==========================================
 board = Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(null));
 drawBoard();
+startCycle();
+startDemo();
 </script>
 </body>
 </html>
-
-
